@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CharacteristicList } from '../ble.config';
 
 @Component({
   selector: 'app-home',
@@ -7,6 +8,11 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  characteristicList = CharacteristicList
 
+  constructor() { }
+
+  connect() {
+
+  }
 }

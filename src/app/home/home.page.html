@@ -1,20 +1,30 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      <img src="assets/logo.webp" alt="">
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="content">
+    <h3>Aily Config Tool</h3>
+    <div class="data-list">
+      <div *ngFor="let item of characteristicList">
+        <div class="inner">
+          <div class="name">{{item.name}}</div>
+          <div class="value-box">
+            <div class="value">
+              12345
+              <!-- {{item.uuid | 'value'}} -->
+            </div>
+            <div class="unit">{{item.unit}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <ion-button expand="block">WiFi Config</ion-button>
+    <ion-button expand="block">Model Config</ion-button>
   </div>
 </ion-content>
