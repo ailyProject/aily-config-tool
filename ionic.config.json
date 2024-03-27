@@ -1,0 +1,7 @@
+{
+  "name": "aily-config",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
