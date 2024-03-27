@@ -13,7 +13,7 @@ ion-title {
   flex-wrap: wrap;
 
   >div {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     width: 50%;
     display: flex;
     align-items: center;
@@ -21,14 +21,16 @@ ion-title {
 
     .inner {
       width: 40vw;
-      height: 55px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      padding: 10px;
     }
 
     .name {
       color: #666;
+      margin-bottom: 3px;
     }
 
     .value-box{
