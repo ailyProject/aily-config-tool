@@ -11,6 +11,14 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'wifi-config',
+    loadChildren: () => import('./pages/wifi-config/wifi-config.module').then( m => m.WifiConfigPageModule)
+  },
+  {
+    path: 'model-config',
+    loadChildren: () => import('./pages/model-config/model-config.module').then( m => m.ModelConfigPageModule)
+  },
 ];
 
 @NgModule({
