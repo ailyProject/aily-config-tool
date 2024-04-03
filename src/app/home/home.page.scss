@@ -4,6 +4,10 @@ ion-title {
   }
 }
 
+ion-content {
+  --overflow: hidden;
+}
+
 .content {
   padding: 5px 15px;
 }
@@ -11,23 +15,18 @@ ion-title {
 .data-list {
   display: flex;
   flex-wrap: wrap;
+  width: calc(100% + 15px);
 
   >div {
-    margin-bottom: 10px;
-    width: 50%;
+    width: calc(50% - 15px);
     display: flex;
     align-items: center;
     justify-content: center;
-
-    .inner {
-      width: 40vw;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-      padding: 10px;
-      background: #FFF;
-    }
+    border-radius: 5px;
+    background: #FFF;
+    padding: 10px;
+    margin-right: 15px;
+    margin-bottom: 15px;
 
     .name {
       color: #666;
@@ -65,11 +64,15 @@ ion-title {
   background: #3980FE;
   padding-left: 15px;
 
-  div {
-    margin-right: 5px;
-    width: 30px;
+  div:first-child {
+    margin-right: 10px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.2);
   }
 
   &.btn2 {
@@ -80,8 +83,8 @@ ion-title {
     background: #1196FF;
   }
 
-  .arrow{
+  .arrow {
     position: absolute;
-    right: 15px;
+    right: 30px;
   }
 }

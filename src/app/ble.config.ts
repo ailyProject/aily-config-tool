@@ -51,9 +51,15 @@ export const CharacteristicList = [
         uuid: "123e4567-e89b-12d3-a456-426614174008"
     },
     {
-        name: "Battery/Power",
+        name: "Battery",
         icon: "fa-regular fa-battery-full",
         unit: "%",
+        uuid: "123e4567-e89b-12d3-a456-42661417409"
+    },
+    {
+        name: "Power",
+        icon: "fa-regular fa-bolt",
+        unit: "",
         uuid: "123e4567-e89b-12d3-a456-42661417409"
     }
 ];
