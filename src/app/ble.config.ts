@@ -9,7 +9,7 @@ export const CharacteristicList = [
         uuid: "123e4567-e89b-12d3-a456-426614174001"
     },
     {
-        name: "Device Model",
+        name: "Model",
         icon: "fa-regular fa-layer-group",
         unit: "",
         uuid: "123e4567-e89b-12d3-a456-426614174002"
