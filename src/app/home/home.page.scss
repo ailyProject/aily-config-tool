@@ -4,7 +4,7 @@ ion-title {
   }
 }
 
-.content{
+.content {
   padding: 5px 15px;
 }
 
@@ -34,7 +34,7 @@ ion-title {
       margin-bottom: 3px;
     }
 
-    .value-box{
+    .value-box {
       display: flex;
       align-items: flex-end;
     }
@@ -51,5 +51,37 @@ ion-title {
       font-size: 0.5em;
       color: #666;
     }
+  }
+}
+
+.btn {
+  height: 50px;
+  margin-top: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  color: #FFF;
+  background: #3980FE;
+  padding-left: 15px;
+
+  div {
+    margin-right: 5px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+  }
+
+  &.btn2 {
+    background: #FBA60D;
+  }
+
+  &.btn3 {
+    background: #1196FF;
+  }
+
+  .arrow{
+    position: absolute;
+    right: 15px;
   }
 }

@@ -11,6 +11,9 @@
     <h3>Aily Config Tool</h3>
     <div class="data-list">
       <div *ngFor="let item of characteristicList">
+        <div>
+          <i class="{{item.icon}}"></i>
+        </div>
         <div class="inner">
           <div class="name">{{item.name}}</div>
           <div class="value-box">
@@ -24,8 +27,32 @@
       </div>
     </div>
 
-    <ion-button expand="block" [routerLink]="['/wifi-config']">WiFi Config</ion-button>
-    <ion-button expand="block" [routerLink]="['/model-config']">Model Config</ion-button>
-    <ion-button expand="block" [routerLink]="['/model-config']">Chat Log</ion-button>
+    <div class="btn btn1" [routerLink]="['/wifi-config']">
+      <div>
+        <i class="fa-regular fa-wifi"></i>
+      </div>
+      WiFi Config
+      <div class="arrow">
+        <i class="fa-light fa-angle-right"></i>
+      </div>
+    </div>
+    <div class="btn btn2" [routerLink]="['/model-config']">
+      <div>
+        <i class="fa-regular fa-layer-group"></i>
+      </div>
+      Model Config
+      <div class="arrow">
+        <i class="fa-light fa-angle-right"></i>
+      </div>
+    </div>
+    <div class="btn btn3" [routerLink]="['/chat-log']">
+      <div>
+        <i class="fa-regular fa-message-lines"></i>
+      </div>
+      Chat Log
+      <div class="arrow">
+        <i class="fa-light fa-angle-right"></i>
+      </div>
+    </div>
   </div>
 </ion-content>
