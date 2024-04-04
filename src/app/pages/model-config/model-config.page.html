@@ -22,6 +22,16 @@
         <div slot="label">API Key</div>
       </ion-input>
     </ion-item>
+    <ion-item>
+      <ion-input labelPlacement="floating">
+        <div slot="label">System Prompt</div>
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input labelPlacement="floating">
+        <div slot="label">Temperature</div>
+      </ion-input>
+    </ion-item>
     <ion-item-divider>
       <ion-label>Speech Recognition</ion-label>
     </ion-item-divider>
@@ -48,7 +58,11 @@
         <div slot="label">API Key</div>
       </ion-input>
     </ion-item>
-
+    <ion-item>
+      <ion-input labelPlacement="floating">
+        <div slot="label">Role</div>
+      </ion-input>
+    </ion-item>
     <ion-item>
       <ion-button style="margin: 15px 0;width: 100%;" size="default" expand="block" (click)="save()">Save</ion-button>
     </ion-item>
