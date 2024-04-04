@@ -7,9 +7,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WifiConfigPage implements OnInit {
 
+  ap;
+  password;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  connect() {
+
   }
 
 }

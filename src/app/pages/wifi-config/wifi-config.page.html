@@ -8,5 +8,19 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-
+  <ion-list class="list-inset">
+    <ion-item>
+      <ion-input labelPlacement="floating" [(ngModel)]="ap">
+        <div slot="label">AP</div>
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input labelPlacement="floating" [(ngModel)]="password">
+        <div slot="label">Password</div>
+      </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-button style="margin: 15px 0;width: 100%;" size="default" expand="block" (click)="connect()">Connect</ion-button>
+    </ion-item>
+  </ion-list>
 </ion-content>

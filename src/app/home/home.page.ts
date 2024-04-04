@@ -8,6 +8,9 @@ import { CharacteristicList } from '../ble.config';
 })
 export class HomePage {
 
+
+  colors=[]
+  
   characteristicList = CharacteristicList
 
   constructor() { }

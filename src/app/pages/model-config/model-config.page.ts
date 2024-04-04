@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { modelList } from 'src/app/model.config';
 
 @Component({
   selector: 'app-model-config',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ModelConfigPage implements OnInit {
 
+  modelList = modelList
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  save() {
+
   }
 
 }

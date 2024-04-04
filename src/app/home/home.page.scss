@@ -16,6 +16,7 @@ ion-content {
   display: flex;
   flex-wrap: wrap;
   width: calc(100% + 15px);
+  margin-top: 10px;
 
   .item {
     width: calc(50% - 15px);
@@ -39,7 +40,7 @@ ion-content {
     }
 
     .name {
-      color: #666;
+      color: #777;
       margin-bottom: 3px;
     }
 
@@ -64,7 +65,7 @@ ion-content {
 }
 
 .btn {
-  height: 50px;
+  height: 56px;
   margin-top: 10px;
   border-radius: 5px;
   display: flex;
