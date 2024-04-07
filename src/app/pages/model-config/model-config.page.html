@@ -13,7 +13,7 @@
       <ion-label>Large Language</ion-label>
     </ion-item-divider>
     <ion-item>
-      <ion-select label="Model" placeholder="可用模型">
+      <ion-select label="Model" placeholder="可用模型" labelPlacement="floating">
         <ion-select-option value="{{item.value}}" *ngFor="let item of modelList">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
@@ -32,11 +32,11 @@
         <div slot="label">Temperature</div>
       </ion-input>
     </ion-item>
-    <ion-item-divider>
+    <ion-item-divider style="margin-top: 10px;">
       <ion-label>Speech Recognition</ion-label>
     </ion-item-divider>
     <ion-item>
-      <ion-select label="Model" placeholder="可用模型">
+      <ion-select label="Model" placeholder="可用模型" labelPlacement="floating">
         <ion-select-option value="{{item.value}}" *ngFor="let item of modelList">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
@@ -45,11 +45,11 @@
         <div slot="label">API Key</div>
       </ion-input>
     </ion-item>
-    <ion-item-divider>
+    <ion-item-divider style="margin-top: 10px;">
       <ion-label>Text To Speech</ion-label>
     </ion-item-divider>
     <ion-item>
-      <ion-select label="Model" placeholder="可用模型">
+      <ion-select label="Model" placeholder="可用模型" labelPlacement="floating">
         <ion-select-option value="{{item.value}}" *ngFor="let item of modelList">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
