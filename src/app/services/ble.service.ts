@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-// import { DataService } from './data.service';
-
+import { BleClient } from '@capacitor-community/bluetooth-le';
 const bluetooth = (navigator as any).bluetooth;
 
 @Injectable({
