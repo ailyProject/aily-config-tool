@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BleService } from 'src/app/services/ble.service';
 
 @Component({
   selector: 'app-wifi-config',
@@ -10,12 +11,15 @@ export class WifiConfigPage implements OnInit {
   ap;
   password;
 
-  constructor() { }
+  constructor(
+    private bleService: BleService
+  ) { }
 
   ngOnInit() {
   }
 
   connect() {
+
 
   }
 

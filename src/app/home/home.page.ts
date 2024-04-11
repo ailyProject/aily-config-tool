@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CharacteristicList } from '../ble.config';
+import { BleService } from '../services/ble.service';
 
 @Component({
   selector: 'app-home',
@@ -9,11 +10,18 @@ import { CharacteristicList } from '../ble.config';
 export class HomePage {
 
 
-  colors=[]
-  
+  colors = []
+
   characteristicList = CharacteristicList
 
-  constructor() { }
+  constructor(
+    private bleService: BleService
+  ) { }
+
+  async scanDevice() {
+    await this.bleService.init();
+    this.bleService.scan();
+  }
 
   connect() {
 
