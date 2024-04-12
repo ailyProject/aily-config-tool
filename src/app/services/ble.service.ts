@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Platform } from '@ionic/angular';
 import { BleClient } from '@capacitor-community/bluetooth-le';
+import { CharacteristicList, serviceUUID } from '../ble.config';
 // const bluetooth = (navigator as any).bluetooth;
 
 @Injectable({
@@ -10,7 +11,8 @@ import { BleClient } from '@capacitor-community/bluetooth-le';
 export class BleService {
 
   device = {
-    deviceId: 'f0:08:d1:8b:3b:7b',
+    name: null,
+    deviceId: null,
     service: null,
     characteristic: null,
     value: null
@@ -18,8 +20,8 @@ export class BleService {
   server = null;
   characteristicInstance = null;
 
-  serviceUUID = '0000ffe0-0000-1000-8000-00805f9b34fb'
-  characteristicUUID = '0000ffe1-0000-1000-8000-00805f9b34fb'
+  serviceUUID = serviceUUID
+  characteristicList = CharacteristicList
 
   dataChanged = new Subject()
 
@@ -64,14 +66,17 @@ export class BleService {
 
   scan_web() {
     BleClient.requestDevice({
-      // acceptAllDevices: true,
-      // optionalServices: [this.serviceUUID],
-      // filters: [{ services: [this.serviceUUID] }]
-    }).then(device => {
-      // this.device = device;
-      console.log(this.device);
-
-      // return device;
+      services: [this.serviceUUID],
+    }).then(async device => {
+      console.log(device);
+      this.device.deviceId = device.name
+      this.device.deviceId = device.deviceId
+      await BleClient.connect(device.deviceId, (deviceId) => this.onDisconnect(deviceId));
+      this.characteristicList.forEach(item => {
+        BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
+          console.log('Received value', value)
+        })
+      });
     })
     // .then(server => {
     //   this.server = server;
@@ -109,7 +114,7 @@ export class BleService {
   }
 
   sendModelData(data: { model: string }) {
-    
+
   }
 
   send(uuid, value) {
@@ -134,6 +139,10 @@ export class BleService {
   async connect(device) {
     await BleClient.connect(device.deviceId);
     console.log('connected to device', device);
+  }
+
+  onDisconnect(deviceId: string): void {
+    console.log(`device ${deviceId} disconnected`);
   }
 
   tempData = '';
