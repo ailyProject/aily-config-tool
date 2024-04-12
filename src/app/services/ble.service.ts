@@ -17,11 +17,11 @@ export class BleService {
     characteristic: null,
     value: null
   };
-  server = null;
-  characteristicInstance = null;
 
   serviceUUID = serviceUUID
   characteristicList = CharacteristicList
+
+  dataCache = {}
 
   dataChanged = new Subject()
 
@@ -75,6 +75,7 @@ export class BleService {
       this.characteristicList.forEach(item => {
         BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
           console.log('Received value', value)
+          this.dataCache[item.uuid] = value
         })
       });
     })
@@ -108,9 +109,9 @@ export class BleService {
     // 发送wifi连接信息
     this.send(this.wifiUUID, data)
     // 监听网络连接状态
-    BleClient.startNotifications(this.device.deviceId, this.device.service, this.device.characteristic, (value) => {
-      console.log('Received value', value)
-    })
+    // BleClient.startNotifications(this.device.deviceId, this.device.service, this.device.characteristic, (value) => {
+    //   console.log('Received value', value)
+    // })
   }
 
   sendModelData(data: { model: string }) {
@@ -119,21 +120,6 @@ export class BleService {
 
   send(uuid, value) {
     BleClient.write(this.device.deviceId, this.device.service, this.device.characteristic, value)
-  }
-
-  sendData(data) {
-    if (!this.characteristicInstance) {
-      console.log('No characteristic to write to!');
-      return;
-    }
-    let encoder = new TextEncoder();
-    this.characteristicInstance.writeValue(encoder.encode(data))
-      .then(() => {
-        // console.log(`Data sent: ${data}`);
-      })
-      .catch(error => {
-        // console.log(`Send error: ${error}`);
-      });
   }
 
   async connect(device) {

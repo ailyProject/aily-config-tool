@@ -23,7 +23,7 @@
           <div class="name">{{item.name}}</div>
           <div class="value-box">
             <div class="value">
-              12
+              {{dataCache[item.uuid]||'-'}}
               <!-- {{item.uuid | 'value'}} -->
             </div>
             <div class="unit">{{item.unit}}</div>

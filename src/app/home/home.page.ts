@@ -14,6 +14,10 @@ export class HomePage {
 
   characteristicList = CharacteristicList
 
+  get dataCache() {
+    return this.bleService.dataCache
+  }
+
   constructor(
     private bleService: BleService
   ) { }
