@@ -22,11 +22,15 @@
         <div class="inner">
           <div class="name">{{item.name}}</div>
           <div class="value-box">
-            <div class="value">
-              {{dataCache[item.uuid]||'-'}}
-              <!-- {{item.uuid | 'value'}} -->
-            </div>
-            <div class="unit">{{item.unit}}</div>
+            <ng-container *ngIf="dataCache[item.uuid];else nullbox">
+              <div class="value">
+                {{dataCache[item.uuid]}}
+              </div>
+              <div class="unit">{{item.unit}}</div>
+            </ng-container>
+            <ng-template #nullbox>
+              -
+            </ng-template>
           </div>
         </div>
       </div>

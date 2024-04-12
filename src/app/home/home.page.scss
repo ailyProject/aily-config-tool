@@ -20,14 +20,15 @@ ion-content {
 
   .item {
     width: calc(50% - 15px);
+    height: 56px;
     display: flex;
     align-items: center;
-    // justify-content: center;
     border-radius: 5px;
     background: #FFF;
     padding: 10px;
     margin-right: 15px;
     margin-bottom: 15px;
+    font-size: 14px;
 
     .icon {
       width: 35px;
@@ -36,12 +37,13 @@ ion-content {
       justify-content: center;
       align-items: center;
       margin-right: 5px;
-      font-size: 24px;
+      font-size: 22px;
     }
 
     .name {
       color: #777;
       margin-bottom: 3px;
+      font-size: 14px;
     }
 
     .value-box {
@@ -51,14 +53,14 @@ ion-content {
 
     .value {
       color: #333;
-      font-size: 1.5em;
+      font-size: 16px;
       font-weight: bold;
       line-height: 0.9em;
     }
 
     .unit {
       margin-left: 3px;
-      font-size: 0.5em;
+      font-size: 10px;
       color: #666;
     }
   }
