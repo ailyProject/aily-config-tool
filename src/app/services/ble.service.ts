@@ -9,7 +9,12 @@ import { BleClient } from '@capacitor-community/bluetooth-le';
 })
 export class BleService {
 
-  device = null;
+  device = {
+    deviceId: 'f0:08:d1:8b:3b:7b',
+    service: null,
+    characteristic: null,
+    value: null
+  };
   server = null;
   characteristicInstance = null;
 
@@ -63,10 +68,10 @@ export class BleService {
       // optionalServices: [this.serviceUUID],
       // filters: [{ services: [this.serviceUUID] }]
     }).then(device => {
-      this.device = device;
+      // this.device = device;
       console.log(this.device);
-      // console.log(this.device.name);
-      return device;
+
+      // return device;
     })
     // .then(server => {
     //   this.server = server;
@@ -89,6 +94,26 @@ export class BleService {
     //   console.log(error);
     //   // this.device = null
     // });
+  }
+
+  // https://github.com/capacitor-community/bluetooth-le?tab=readme-ov-file#startnotifications
+
+  wifiUUID = '0000ffe0-0000-1000-8000-00805f9b34fb';
+  sendWifiData(data: { ssid: string, password: string }) {
+    // 发送wifi连接信息
+    this.send(this.wifiUUID, data)
+    // 监听网络连接状态
+    BleClient.startNotifications(this.device.deviceId, this.device.service, this.device.characteristic, (value) => {
+      console.log('Received value', value)
+    })
+  }
+
+  sendModelData(data: { model: string }) {
+    
+  }
+
+  send(uuid, value) {
+    BleClient.write(this.device.deviceId, this.device.service, this.device.characteristic, value)
   }
 
   sendData(data) {
@@ -135,23 +160,23 @@ export class BleService {
   // }
 
   onDisconnected(event) {
-    console.log(`Device ${this.device.name} is disconnected.`);
+    // console.log(`Device ${this.device.name} is disconnected.`);
     this.device = null;
   }
 
   disconnect() {
-    if (this.device) {
-      console.log(`Disconnecting from ${this.device.name}...`);
-      if (this.device.gatt.connected) {
-        this.device.gatt.disconnect();
-        console.log(`Device ${this.device.name} is disconnected.`);
-      } else {
-        console.log(`Device ${this.device.name} is already disconnected.`);
-      }
-      this.device = null;
-    } else {
-      console.log('No device is connected.');
-    }
+    // if (this.device) {
+    //   console.log(`Disconnecting from ${this.device.name}...`);
+    //   if (this.device.gatt.connected) {
+    //     this.device.gatt.disconnect();
+    //     console.log(`Device ${this.device.name} is disconnected.`);
+    //   } else {
+    //     console.log(`Device ${this.device.name} is already disconnected.`);
+    //   }
+    //   this.device = null;
+    // } else {
+    //   console.log('No device is connected.');
+    // }
   }
 
 }
