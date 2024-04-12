@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'aily-config',
+  appId: 'tool.aily.pro',
+  appName: 'aily-config-tool',
   webDir: 'www',
   server: {
     androidScheme: 'https'
