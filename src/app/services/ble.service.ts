@@ -79,27 +79,6 @@ export class BleService {
         })
       });
     })
-    // .then(server => {
-    //   this.server = server;
-    //   this.device.addEventListener('gattserverdisconnected', (event) => this.onDisconnected(event));
-    //   return server.getPrimaryService(this.serviceUUID);
-    // })
-    // .then(service => {
-    //   console.log(service);
-
-    //   return service.getCharacteristic(this.characteristicUUID);
-    // })
-    // .then(characteristic => {
-    //   // console.log(characteristic);
-    //   // this.characteristicInstance = characteristic;
-    //   // // console.log(this.characteristicInstance);
-    //   // this.characteristicInstance.addEventListener('characteristicvaluechanged', (event) => this.handleCharacteristicValueChanged(event));
-    //   // this.characteristicInstance.startNotifications();
-    // })
-    // .catch(error => {
-    //   console.log(error);
-    //   // this.device = null
-    // });
   }
 
   // https://github.com/capacitor-community/bluetooth-le?tab=readme-ov-file#startnotifications
