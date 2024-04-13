@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CharacteristicList } from '../ble.config';
+import { CharacteristicList } from '../configs/ble.config';
 import { BleService } from '../services/ble.service';
 
 @Component({

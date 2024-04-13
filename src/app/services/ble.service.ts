@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Platform } from '@ionic/angular';
 import { BleClient } from '@capacitor-community/bluetooth-le';
-import { CharacteristicList, serviceUUID } from '../ble.config';
+import { CharacteristicList, serviceUUID } from '../configs/ble.config';
 // const bluetooth = (navigator as any).bluetooth;
 
 @Injectable({
@@ -73,10 +73,16 @@ export class BleService {
       this.device.deviceId = device.deviceId
       await BleClient.connect(device.deviceId, (deviceId) => this.onDisconnect(deviceId));
       this.characteristicList.forEach(item => {
-        BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
+        BleClient.read(device.deviceId, this.serviceUUID, item.uuid).then(value => {
           console.log('Received value', value)
-          this.dataCache[item.uuid] = value
+          console.log(value.buffer);
+
+          // this.dataCache[item.uuid] = value.buffer.toString()
         })
+        // BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
+        //   console.log('Received value', value)
+        //   this.dataCache[item.uuid] = value
+        // })
       });
     })
   }
