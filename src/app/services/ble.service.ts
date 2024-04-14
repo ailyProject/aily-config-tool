@@ -74,10 +74,7 @@ export class BleService {
       await BleClient.connect(device.deviceId, (deviceId) => this.onDisconnect(deviceId));
       this.characteristicList.forEach(item => {
         BleClient.read(device.deviceId, this.serviceUUID, item.uuid).then(value => {
-          console.log('Received value', value)
-          console.log(value.buffer);
-
-          // this.dataCache[item.uuid] = value.buffer.toString()
+          this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
         })
         // BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
         //   console.log('Received value', value)
