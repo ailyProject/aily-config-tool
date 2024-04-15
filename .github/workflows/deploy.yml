@@ -23,7 +23,7 @@ jobs:
           npm i -g @ionic/cli
           npm i --force
       
-      - name: Compile
+      - name: Build
         run: |
           ionic build
       
