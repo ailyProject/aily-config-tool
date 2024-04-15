@@ -76,20 +76,21 @@ export class BleService {
         BleClient.read(device.deviceId, this.serviceUUID, item.uuid).then(value => {
           this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
         })
-        // BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
-        //   console.log('Received value', value)
-        //   this.dataCache[item.uuid] = value
-        // })
+        BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
+          console.log('Received value', value)
+          this.dataCache[item.uuid] = value
+        })
       });
     })
   }
 
   // https://github.com/capacitor-community/bluetooth-le?tab=readme-ov-file#startnotifications
 
-  wifiUUID = '0000ffe0-0000-1000-8000-00805f9b34fb';
+  wifiUUID = '123e4567-e89b-12d3-a456-00805f9b34fb';
   sendWifiData(data: { ssid: string, password: string }) {
     // 发送wifi连接信息
-    this.send(this.wifiUUID, data)
+    return true;
+    // return this.send(this.wifiUUID, data)
     // 监听网络连接状态
     // BleClient.startNotifications(this.device.deviceId, this.device.service, this.device.characteristic, (value) => {
     //   console.log('Received value', value)
@@ -101,7 +102,27 @@ export class BleService {
   }
 
   send(uuid, value) {
-    BleClient.write(this.device.deviceId, this.device.service, this.device.characteristic, value)
+    try {
+      // 判断是否已连接设备
+      if (!this.device.deviceId) {
+        console.log('未连接设备');
+        return false;
+      }
+
+      // 判断value是否为string，如果不是则转为string
+      if (typeof value !== 'string') {
+        value = JSON.stringify(value)
+      }
+
+      // 将value转为ArrayBuffer
+      value = new TextEncoder().encode(value)
+
+      BleClient.write(this.device.deviceId, this.serviceUUID, uuid, value)
+      return true;
+    } catch (error) {
+      console.log('send error: ', error)
+      return false;
+    }
   }
 
   async connect(device) {
