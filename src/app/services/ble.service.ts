@@ -89,8 +89,8 @@ export class BleService {
   wifiUUID = '123e4567-e89b-12d3-a456-00805f9b34fb';
   sendWifiData(data: { ssid: string, password: string }) {
     // 发送wifi连接信息
-    return true;
-    // return this.send(this.wifiUUID, data)
+
+    return this.send(this.wifiUUID, data)
     // 监听网络连接状态
     // BleClient.startNotifications(this.device.deviceId, this.device.service, this.device.characteristic, (value) => {
     //   console.log('Received value', value)
