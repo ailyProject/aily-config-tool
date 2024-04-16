@@ -16,6 +16,9 @@
 ```
 ionic build
 ```
+然后将www目录下内容部署到服务器  
+注意：必须要要配置ssl证书才能正常使用web ble功能  
+
 ### android/ios端编译
 ```
 npm run sync
