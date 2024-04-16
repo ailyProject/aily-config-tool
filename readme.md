@@ -8,6 +8,9 @@
 3. 配置模型
 4. 查看对话记录(TODO)
 
+## 适配硬件
+· Raspberry Pi zero W/2W  [已集成aily服务的镜像]()  
+
 ## 编译
 ### PC端/pwa编译  
 ```
