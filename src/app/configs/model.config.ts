@@ -18,14 +18,20 @@ export const ModelConfig = [
 ]
 
 export const LargeLanguageModelOptions = [
-
+    { name: '', value: '' },
+    { name: '', value: '' },
+    { name: '', value: '' },
 ]
 
 export const SpeechRecognitionModelOptions = [
-
+    { name: '', value: '' },
+    { name: '', value: '' },
+    { name: '', value: '' },
 ]
 
 export const TextToSpeechModelOptions = [
-
+    { name: '', value: '' },
+    { name: '', value: '' },
+    { name: '', value: '' },
 ]
 
