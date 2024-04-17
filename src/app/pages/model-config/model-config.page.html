@@ -14,7 +14,7 @@
     </ion-item-divider>
     <ion-item>
       <ion-select label="Model" placeholder="{{ llmData.llm_model || '可用模型' }}" labelPlacement="floating" (ionChange)="set_llm_model($event)">
-        <ion-select-option *ngFor="let item of modelList">{{item.name}}</ion-select-option>
+        <ion-select-option *ngFor="let item of llmModelOptions">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
@@ -37,7 +37,7 @@
     </ion-item-divider>
     <ion-item>
       <ion-select label="Model" placeholder="{{ sttData.stt_model || '可用模型' }}" labelPlacement="floating" (ionChange)="set_stt_model($event)">
-        <ion-select-option value="{{item.value}}" *ngFor="let item of modelList">{{item.name}}</ion-select-option>
+        <ion-select-option value="{{item.value}}" *ngFor="let item of sttModelOptions">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
@@ -50,7 +50,7 @@
     </ion-item-divider>
     <ion-item>
       <ion-select label="Model" placeholder="{{ ttsData.tts_model || '可用模型' }}" labelPlacement="floating" (ionChange)="set_tts_model($event)">
-        <ion-select-option value="{{item.value}}" *ngFor="let item of modelList">{{item.name}}</ion-select-option>
+        <ion-select-option value="{{item.value}}" *ngFor="let item of ttsModelOptions">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>

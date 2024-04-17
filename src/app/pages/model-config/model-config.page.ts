@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { modelList } from 'src/app/model.config';
 import { BleService } from 'src/app/services/ble.service';
 import { NoticeService } from 'src/app/services/notice.service';
+import { llmModelsUUID, sttModelsUUID, ttsModelsUUID, ttsRolesUUID } from 'src/app/configs/ble.config';
 
 @Component({
   selector: 'app-model-config',
@@ -10,7 +11,17 @@ import { NoticeService } from 'src/app/services/notice.service';
 })
 export class ModelConfigPage implements OnInit {
 
-  modelList = modelList
+  get llmModelOptions() {
+    return this.bleService.dataCache[llmModelsUUID];
+  }
+
+  get sttModelOptions() {
+    return this.bleService.dataCache[sttModelsUUID];
+  }
+
+  get ttsModelOptions() {
+    return this.bleService.dataCache[ttsModelsUUID];
+  }
 
   llmData = {
     llm_model: '',

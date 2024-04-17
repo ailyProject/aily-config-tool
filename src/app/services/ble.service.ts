@@ -2,7 +2,18 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Platform } from '@ionic/angular';
 import { BleClient } from '@capacitor-community/bluetooth-le';
-import { CharacteristicList, serviceUUID, llmUUID, wifiUUID, sttUUID, ttsUUID } from '../configs/ble.config';
+import { 
+  CharacteristicList, 
+  serviceUUID, 
+  llmUUID, 
+  wifiUUID, 
+  sttUUID, 
+  ttsUUID,
+  llmModelsUUID,
+  sttModelsUUID,
+  ttsModelsUUID,
+  ttsRolesUUID 
+} from '../configs/ble.config';
 // const bluetooth = (navigator as any).bluetooth;
 
 @Injectable({
@@ -81,6 +92,8 @@ export class BleService {
           this.dataCache[item.uuid] = value
         })
       });
+
+      this.getModelOptions();
     })
   }
 
@@ -103,6 +116,21 @@ export class BleService {
     // BleClient.startNotifications(this.device.deviceId, this.device.service, this.device.characteristic, (value) => {
     //   console.log('Received value', value)
     // })
+  }
+
+  async getModelOptions() {
+    BleClient.read(this.device.deviceId, this.serviceUUID, llmModelsUUID).then(value => {
+      this.dataCache[llmModelsUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
+    })
+    BleClient.read(this.device.deviceId, this.serviceUUID, sttModelsUUID).then(value => {
+      this.dataCache[sttModelsUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
+    })
+    BleClient.read(this.device.deviceId, this.serviceUUID, ttsModelsUUID).then(value => {
+      this.dataCache[ttsModelsUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
+    })
+    BleClient.read(this.device.deviceId, this.serviceUUID, ttsRolesUUID).then(value => {
+      this.dataCache[ttsRolesUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
+    })
   }
 
   async getModelData() {

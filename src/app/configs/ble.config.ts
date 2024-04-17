@@ -4,6 +4,10 @@ export const wifiUUID = "123e4567-e89b-12d3-a456-00805f9b34fb";
 export const llmUUID = "123e4567-e89b-12d3-a456-00805f9b34fc";
 export const sttUUID = "123e4567-e89b-12d3-a456-00805f9b34fd";
 export const ttsUUID = "123e4567-e89b-12d3-a456-00805f9b34fe";
+export const llmModelsUUID = "123e4567-e89b-12d3-a456-00805f9b34ff";
+export const sttModelsUUID = "123e4567-e89b-12d3-a456-00805f9b3500";
+export const ttsModelsUUID = "123e4567-e89b-12d3-a456-00805f9b3501";
+export const ttsRolesUUID = "123e4567-e89b-12d3-a456-00805f9b3502";
 
 export const CharacteristicList = [
     {
@@ -67,3 +71,5 @@ export const CharacteristicList = [
         uuid: "123e4567-e89b-12d3-a456-426614174010"
     }
 ];
+
+
