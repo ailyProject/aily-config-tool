@@ -1,5 +1,9 @@
 
 export const serviceUUID = "123e4567-e89b-12d3-a456-426614174000";
+export const wifiUUID = "123e4567-e89b-12d3-a456-00805f9b34fb";
+export const llmUUID = "123e4567-e89b-12d3-a456-00805f9b34fc";
+export const sttUUID = "123e4567-e89b-12d3-a456-00805f9b34fd";
+export const ttsUUID = "123e4567-e89b-12d3-a456-00805f9b34fe";
 
 export const CharacteristicList = [
     {
@@ -63,4 +67,3 @@ export const CharacteristicList = [
         uuid: "123e4567-e89b-12d3-a456-426614174010"
     }
 ];
-

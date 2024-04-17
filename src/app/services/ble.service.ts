@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Platform } from '@ionic/angular';
 import { BleClient } from '@capacitor-community/bluetooth-le';
-import { CharacteristicList, serviceUUID } from '../configs/ble.config';
+import { CharacteristicList, serviceUUID, llmUUID, wifiUUID, sttUUID, ttsUUID } from '../configs/ble.config';
 // const bluetooth = (navigator as any).bluetooth;
 
 @Injectable({
@@ -86,19 +86,62 @@ export class BleService {
 
   // https://github.com/capacitor-community/bluetooth-le?tab=readme-ov-file#startnotifications
 
-  wifiUUID = '123e4567-e89b-12d3-a456-00805f9b34fb';
+  // wifiUUID = '123e4567-e89b-12d3-a456-00805f9b34fb';
+  getWifiData() {
+    // 获取wifi连接信息
+    BleClient.read(this.device.deviceId, this.serviceUUID, wifiUUID).then(data => {
+      console.log('Received value', data)
+      return new TextDecoder("utf-8").decode(data)
+    })
+  }
+
   sendWifiData(data: { ssid: string, password: string }) {
     // 发送wifi连接信息
 
-    return this.send(this.wifiUUID, data)
+    return this.send(wifiUUID, data)
     // 监听网络连接状态
     // BleClient.startNotifications(this.device.deviceId, this.device.service, this.device.characteristic, (value) => {
     //   console.log('Received value', value)
     // })
   }
 
-  sendModelData(data: { model: string }) {
+  async getModelData() {
+    // 获取模型信息
+    let llmData = await BleClient.read(this.device.deviceId, this.serviceUUID, llmUUID)
+    let sttData = await BleClient.read(this.device.deviceId, this.serviceUUID, sttUUID)
+    let ttsData = await BleClient.read(this.device.deviceId, this.serviceUUID, ttsUUID)
 
+    let data = {
+      "llm": new TextDecoder("utf-8").decode(llmData),
+      "stt": new TextDecoder("utf-8").decode(sttData),
+      "tts": new TextDecoder("utf-8").decode(ttsData),
+    }
+
+    console.log('Received value', data)
+    return data
+  }
+
+  sendLLMData(data: { llm_model: string, llm_key: string, llm_preprompt: string, llm_temp: string }) {
+    // 发送语言模型信息
+    return this.send(llmUUID, data)
+  }
+
+  sendSTTData(data: { stt_model: string, stt_key: string }) {
+    // 发送语音识别模型信息
+    return this.send(sttUUID, data)
+  }
+
+  sendTTSData(data: { tts_model: string, tts_key: string, tts_role: string }) {
+    // 发送语音合成模型信息
+    return this.send(ttsUUID, data)
+  }
+
+  sendModelData(data: { llm: any, stt: any, tts: any}) {
+    this.sendLLMData(data.llm)
+    this.sendSTTData(data.stt)
+    this.sendTTSData(data.tts)
+
+    return true;
   }
 
   send(uuid, value) {
