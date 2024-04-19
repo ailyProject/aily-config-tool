@@ -4,13 +4,15 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { ChatLogPage } from './chat-log.page';
 import { ChatLogPageRoutingModule } from './chat-log-routing.module';
+import { DialogComponent } from 'src/app/components/dialog/dialog.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ChatLogPageRoutingModule
+    ChatLogPageRoutingModule,
+    DialogComponent
   ],
   declarations: [ChatLogPage]
 })
