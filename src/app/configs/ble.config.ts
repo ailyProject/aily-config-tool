@@ -1,13 +1,32 @@
 
 export const serviceUUID = "123e4567-e89b-12d3-a456-426614174000";
 export const wifiUUID = "123e4567-e89b-12d3-a456-00805f9b34fb";
-export const llmUUID = "123e4567-e89b-12d3-a456-00805f9b34fc";
-export const sttUUID = "123e4567-e89b-12d3-a456-00805f9b34fd";
-export const ttsUUID = "123e4567-e89b-12d3-a456-00805f9b34fe";
-export const llmModelsUUID = "123e4567-e89b-12d3-a456-00805f9b34ff";
-export const sttModelsUUID = "123e4567-e89b-12d3-a456-00805f9b3500";
-export const ttsModelsUUID = "123e4567-e89b-12d3-a456-00805f9b3501";
-export const ttsRolesUUID = "123e4567-e89b-12d3-a456-00805f9b3502";
+export const ailyUUID = "123e4567-e89b-12d3-a456-00805f9b3509";
+
+export const llmModelOptionsUUID = "123e4567-e89b-12d3-a456-00805f9b3500";
+export const sttModelOptionsUUID = "123e4567-e89b-12d3-a456-00805f9b3503";
+export const ttsModelOptionsUUID = "123e4567-e89b-12d3-a456-00805f9b3507";
+export const ttsRoleOptionsUUID = "123e4567-e89b-12d3-a456-00805f9b3508";
+
+
+export const ChrModelOptionsList = [
+    { name: "llmModelOptions", uuid: llmModelOptionsUUID},
+    { name: "sttModelOptions", uuid: sttModelOptionsUUID},
+    { name: "ttsModelOptions", uuid: ttsModelOptionsUUID},
+    { name: "ttsRoleOptions", uuid: ttsRoleOptionsUUID },
+]
+
+export const ChrModelConfList = [
+    { name: "llmModel", uuid: "123e4567-e89b-12d3-a456-426614174002" },
+    { name: "llmKey", uuid: "123e4567-e89b-12d3-a456-00805f9b34fd" },
+    { name: "llmPrePrompt", uuid: "123e4567-e89b-12d3-a456-00805f9b34fe" },
+    { name: "llmTemp", uuid: "123e4567-e89b-12d3-a456-00805f9b34ff" },
+    { name: "sttModel", uuid: "123e4567-e89b-12d3-a456-00805f9b3501" },
+    { name: "sttKey", uuid: "123e4567-e89b-12d3-a456-00805f9b3502" },
+    { name: "ttsModel", uuid: "123e4567-e89b-12d3-a456-00805f9b3504" },
+    { name: "ttsKey", uuid: "123e4567-e89b-12d3-a456-00805f9b3505" },
+    { name: "ttsRole", uuid: "123e4567-e89b-12d3-a456-00805f9b3506" },
+]
 
 export const CharacteristicList = [
     {
