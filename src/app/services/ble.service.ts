@@ -42,7 +42,7 @@ export class BleService {
   browserVersionError = false
 
   async init() {
-    await BleClient.initialize();
+    await BleClient.initialize({ androidNeverForLocation: true });
     // if (!bluetooth) {
     //   console.log('不支持的浏览器');
     // }
