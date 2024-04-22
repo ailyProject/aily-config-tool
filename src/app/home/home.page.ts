@@ -9,6 +9,9 @@ import { BleService } from '../services/ble.service';
 })
 export class HomePage {
 
+  get device() {
+    return this.bleService.device
+  }
 
   colors = []
 
@@ -27,7 +30,4 @@ export class HomePage {
     this.bleService.scan();
   }
 
-  connect() {
-
-  }
 }

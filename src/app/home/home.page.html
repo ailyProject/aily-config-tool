@@ -2,7 +2,7 @@
   <div class="header">
     <img src="assets/logo.webp" alt="">
     <div class="text">Config Tool</div>
-    <ion-button class="scan" (click)="scanDevice()">
+    <ion-button class="scan" [ngClass]="{'wait': !device.name}" (click)="scanDevice()">
       <i class="fa-regular fa-magnifying-glass"></i>
     </ion-button>
   </div>

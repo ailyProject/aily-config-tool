@@ -2,6 +2,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #DDD;
+  position: relative;
 
   img {
     height: 35px;
@@ -11,11 +14,16 @@
     font-size: 12px;
     font-weight: 500;
   }
-}
 
-.scan{
-  position: absolute;
-  right: 15px;
+  .scan{
+    position: absolute;
+    right: 15px;
+    bottom: 0;
+
+    &.wait{
+      --background: #ccc;
+    }
+  }
 }
 
 ion-content {
