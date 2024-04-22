@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Platform } from '@ionic/angular';
 import { BleClient } from '@capacitor-community/bluetooth-le';
-import { 
+import {
   CharacteristicList,
-  ChrModelConfList, 
+  ChrModelConfList,
   ChrModelOptionsList,
-  serviceUUID, 
+  serviceUUID,
   wifiUUID,
   ailyUUID,
 } from '../configs/ble.config';
@@ -57,17 +57,17 @@ export class BleService {
     try {
       await BleClient.requestLEScan(
         {
-          // services: [HEART_RATE_SERVICE],
+          services: [this.serviceUUID],
         },
         (result) => {
           console.log('received new scan result', result);
         }
       );
 
-      setTimeout(async () => {
-        await BleClient.stopLEScan();
-        console.log('stopped scanning');
-      }, 5000);
+      // setTimeout(async () => {
+      //   await BleClient.stopLEScan();
+      //   console.log('stopped scanning');
+      // }, 5000);
     } catch (error) {
       console.error(error);
     }

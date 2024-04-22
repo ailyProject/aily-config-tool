@@ -1,7 +1,21 @@
-ion-title {
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   img {
-    height: 45px;
+    height: 35px;
   }
+
+  .text {
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
+
+.scan{
+  position: absolute;
+  right: 15px;
 }
 
 ion-content {
