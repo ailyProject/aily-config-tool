@@ -1,8 +1,10 @@
 <div class="dialog-box animate__animated animate__faster animate__fadeIn" [ngClass]="{'mine':isMine}" (click)="debug()">
     <div class="bubble">
         <div class="tail"></div>
-        <div class="content" #mdContent>
-            <ng-content></ng-content>
+        <div class="content">
+            <div>
+                <ng-content></ng-content>
+            </div>
         </div>
     </div>
 </div>

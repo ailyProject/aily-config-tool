@@ -20,11 +20,10 @@ nz-avatar {
     justify-content: center;
     margin: 5px 15px;
     background: #ddd;
-    width: 100%;
+    width: calc(100% - 30px);
     min-height: 44px;
     border-radius: 0 10px 10px 10px;
     position: relative;
-    // padding-bottom: 10px;
 
     .tail {
         width: 0;
@@ -56,7 +55,10 @@ nz-avatar {
         display: flex;
         align-items: center;
         width: 100%;
-        flex-grow: 0;
+        position: relative;
+        >div{
+            
+        }
     }
 
     .state {
