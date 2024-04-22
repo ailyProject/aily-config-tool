@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { modelList } from 'src/app/model.config';
 import { BleService } from 'src/app/services/ble.service';
 import { NoticeService } from 'src/app/services/notice.service';
-import { llmModelsUUID, sttModelsUUID, ttsModelsUUID, ttsRolesUUID } from 'src/app/configs/ble.config';
+import { llmModelOptionsUUID, sttModelOptionsUUID, ttsModelOptionsUUID } from 'src/app/configs/ble.config';
 
 @Component({
   selector: 'app-model-config',
@@ -12,34 +12,30 @@ import { llmModelsUUID, sttModelsUUID, ttsModelsUUID, ttsRolesUUID } from 'src/a
 export class ModelConfigPage implements OnInit {
 
   get llmModelOptions() {
-    return this.bleService.dataCache[llmModelsUUID];
+    return this.bleService.dataCache[llmModelOptionsUUID];
   }
 
   get sttModelOptions() {
-    return this.bleService.dataCache[sttModelsUUID];
+    return this.bleService.dataCache[sttModelOptionsUUID];
   }
 
   get ttsModelOptions() {
-    return this.bleService.dataCache[ttsModelsUUID];
+    return this.bleService.dataCache[ttsModelOptionsUUID];
   }
 
-  llmData = {
-    llm_model: '',
-    llm_key: '',
-    llm_preprompt: '',
-    llm_temp: ''
-  }
+  modelConfData: any =
+    {
+      "llmModel": "",
+      "llmKey": "",
+      "llmPrePrompt": "",
+      "llmTemp": "",
+      "sttModel": "",
+      "sttKey": "",
+      "ttsModel": "",
+      "ttsKey": "",
+      "ttsRole": ""
+    }
 
-  ttsData = {
-    tts_model: '',
-    tts_key: '',
-    tts_role: ''
-  }
-
-  sttData = {
-    stt_model: '',
-    stt_key: '',
-  }
 
   constructor(
     private bleService: BleService,
@@ -49,34 +45,25 @@ export class ModelConfigPage implements OnInit {
   ngOnInit() {
     console.log('model config init')
     this.bleService.getModelData().then((modelData) => {
-      console.log(modelData);
-      if (modelData) {
-        this.llmData = JSON.parse(modelData.llm);
-        this.sttData = JSON.parse(modelData.stt);
-        this.ttsData = JSON.parse(modelData.tts);
-      }
+      this.modelConfData = modelData;
+      console.log("modelConfData: ", this.modelConfData);
     });
   }
 
   set_llm_model(e) {
-    this.llmData.llm_model = e.detail.value;
+    this.modelConfData.llmModel.value = e.detail.value;
   }
 
   set_stt_model(e) {
-    this.sttData.stt_model = e.detail.value;
+    this.modelConfData.sttModel.value = e.detail.value;
   }
 
   set_tts_model(e) {
-    this.ttsData.tts_model = e.detail.value;
+    this.modelConfData.ttsModel.value = e.detail.value;
   }
 
   save() {
-    let modelData = {
-      llm: this.llmData,
-      stt: this.sttData,
-      tts: this.ttsData
-    }
-    if (this.bleService.sendModelData(modelData)) {
+    if (this.bleService.sendModelData(this.modelConfData)) {
       this.noticeService.showToast('success');
     } else {
       this.noticeService.showToast('error');

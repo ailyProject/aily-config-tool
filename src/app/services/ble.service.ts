@@ -3,16 +3,12 @@ import { Subject } from 'rxjs';
 import { Platform } from '@ionic/angular';
 import { BleClient } from '@capacitor-community/bluetooth-le';
 import { 
-  CharacteristicList, 
+  CharacteristicList,
+  ChrModelConfList, 
+  ChrModelOptionsList,
   serviceUUID, 
-  llmUUID, 
-  wifiUUID, 
-  sttUUID, 
-  ttsUUID,
-  llmModelsUUID,
-  sttModelsUUID,
-  ttsModelsUUID,
-  ttsRolesUUID 
+  wifiUUID,
+  ailyUUID,
 } from '../configs/ble.config';
 // const bluetooth = (navigator as any).bluetooth;
 
@@ -31,6 +27,8 @@ export class BleService {
 
   serviceUUID = serviceUUID
   characteristicList = CharacteristicList
+  chrModelOptionsList = ChrModelOptionsList
+  chrModelConfList = ChrModelConfList
 
   dataCache = {}
 
@@ -119,57 +117,35 @@ export class BleService {
   }
 
   async getModelOptions() {
-    BleClient.read(this.device.deviceId, this.serviceUUID, llmModelsUUID).then(value => {
-      this.dataCache[llmModelsUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
-    })
-    BleClient.read(this.device.deviceId, this.serviceUUID, sttModelsUUID).then(value => {
-      this.dataCache[sttModelsUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
-    })
-    BleClient.read(this.device.deviceId, this.serviceUUID, ttsModelsUUID).then(value => {
-      this.dataCache[ttsModelsUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
-    })
-    BleClient.read(this.device.deviceId, this.serviceUUID, ttsRolesUUID).then(value => {
-      this.dataCache[ttsRolesUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
+    this.chrModelOptionsList.forEach(item => {
+      BleClient.read(this.device.deviceId, this.serviceUUID, item.uuid).then(value => {
+        this.dataCache[item.uuid] = JSON.parse(new TextDecoder("utf-8").decode(value))
+      })
     })
   }
 
   async getModelData() {
+    let data: any = {};
     // 获取模型信息
-    let llmData = await BleClient.read(this.device.deviceId, this.serviceUUID, llmUUID)
-    let sttData = await BleClient.read(this.device.deviceId, this.serviceUUID, sttUUID)
-    let ttsData = await BleClient.read(this.device.deviceId, this.serviceUUID, ttsUUID)
-
-    let data = {
-      "llm": new TextDecoder("utf-8").decode(llmData),
-      "stt": new TextDecoder("utf-8").decode(sttData),
-      "tts": new TextDecoder("utf-8").decode(ttsData),
-    }
+    this.chrModelConfList.forEach(item => {
+      BleClient.read(this.device.deviceId, this.serviceUUID, item.uuid).then(value => {
+        let res = new TextDecoder("utf-8").decode(value)
+        this.dataCache[item.uuid] = res
+        data[item.name] = res
+      })
+    })
 
     console.log('Received value', data)
     return data
   }
 
-  sendLLMData(data: { llm_model: string, llm_key: string, llm_preprompt: string, llm_temp: string }) {
-    // 发送语言模型信息
-    return this.send(llmUUID, data)
-  }
+  sendModelData(data) {
+    this.chrModelConfList.forEach(item => {
+      this.send(item.uuid, data[item.name])
+    })
 
-  sendSTTData(data: { stt_model: string, stt_key: string }) {
-    // 发送语音识别模型信息
-    return this.send(sttUUID, data)
-  }
-
-  sendTTSData(data: { tts_model: string, tts_key: string, tts_role: string }) {
-    // 发送语音合成模型信息
-    return this.send(ttsUUID, data)
-  }
-
-  sendModelData(data: { llm: any, stt: any, tts: any}) {
-    this.sendLLMData(data.llm)
-    this.sendSTTData(data.stt)
-    this.sendTTSData(data.tts)
-
-    return true;
+    this.send(ailyUUID, "reload")
+    return true
   }
 
   send(uuid, value) {
