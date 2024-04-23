@@ -17,6 +17,8 @@ import {
 })
 export class BleService {
 
+  wifiSetSuccess = new Subject();
+
   device = {
     name: null,
     deviceId: null,
@@ -86,8 +88,11 @@ export class BleService {
           this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
         })
         BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
-          console.log('Received value', value)
-          this.dataCache[item.uuid] = value
+          // console.log(item.uuid, '->Received value', new TextDecoder("utf-8").decode(value))
+          this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
+          if (item.uuid === "123e4567-e89b-12d3-a456-426614174004") {
+            this.wifiSetSuccess.next("success")
+          }
         })
       });
 
@@ -109,7 +114,7 @@ export class BleService {
   sendWifiData(data: { ssid: string, password: string }) {
     // 发送wifi连接信息
 
-    return this.send(wifiUUID, data)
+    this.send(wifiUUID, data)
     // 监听网络连接状态
     // BleClient.startNotifications(this.device.deviceId, this.device.service, this.device.characteristic, (value) => {
     //   console.log('Received value', value)
@@ -148,12 +153,12 @@ export class BleService {
     return true
   }
 
-  send(uuid, value) {
+  send(uuid, value): void {
     try {
       // 判断是否已连接设备
       if (!this.device.deviceId) {
         console.log('未连接设备');
-        return false;
+        return;
       }
 
       // 判断value是否为string，如果不是则转为string
@@ -164,13 +169,14 @@ export class BleService {
       // 将value转为ArrayBuffer
       value = new TextEncoder().encode(value)
 
-      BleClient.write(this.device.deviceId, this.serviceUUID, uuid, value)
-      return true;
+      BleClient.write(this.device.deviceId, this.serviceUUID, uuid, value).then(() => {
+        console.log('send success')
+      })
     } catch (error) {
       console.log('send error: ', error)
-      return false;
     }
   }
+
 
   async connect(device) {
     await BleClient.connect(device.deviceId);

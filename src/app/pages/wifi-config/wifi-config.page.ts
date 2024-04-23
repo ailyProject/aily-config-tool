@@ -18,19 +18,18 @@ export class WifiConfigPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.bleService.wifiSetSuccess.subscribe(() => {
+      this.noticeService.hideLoading();
+      this.noticeService.showToast('Wifi设置成功');
+    })
   }
 
   connect() {
     if (!this.ap || !this.password) {
       return
     }
-
-    let res = this.bleService.sendWifiData({ssid: this.ap, password: this.password})
-    if (res) {
-      this.noticeService.showToast('wifi设置成功')
-    } else {
-      this.noticeService.showToast('wifi设置失败')
-    }
+    this.noticeService.showLoading('Setting up WiFi...', 100000000)
+    this.bleService.sendWifiData({ssid: this.ap, password: this.password})
   }
 
 }

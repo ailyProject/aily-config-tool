@@ -23,13 +23,13 @@ export class NoticeService {
     return
   }
 
-  async showLoading() {
-    const loading = await this.loadingCtrl.create({
-      message: 'Loading...',
-      duration: 3000,
+  async showLoading(msg, duration=3000) {
+    this.loading = await this.loadingCtrl.create({
+      message: msg,
+      duration: duration,
     });
 
-    loading.present();
+    this.loading.present();
   }
 
   async showToast(msg) {
