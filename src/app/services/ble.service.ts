@@ -180,11 +180,18 @@ export class BleService {
     }
   }
 
+  tempLogData = '';
+
   startLogSub(): void {
     BleClient.startNotifications(this.device.deviceId, this.serviceUUID, ailyLogUUID, (value) => {
       let data = new TextDecoder("utf-8").decode(value)
       console.log('Received value', data)
-      this.ailyLogs.push(JSON.parse(data))
+      if (data === '\n') {
+        this.ailyLogs.push(JSON.parse(this.tempLogData))
+        this.tempLogData = ''
+      } else {
+        this.tempLogData += data;
+      }
     })
   }
 

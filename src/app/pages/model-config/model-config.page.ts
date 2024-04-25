@@ -51,15 +51,16 @@ export class ModelConfigPage implements OnInit {
   }
 
   set_llm_model(e) {
-    this.modelConfData.llmModel.value = e.detail.value;
+    this.modelConfData.llmModel = e.detail.value;
   }
 
   set_stt_model(e) {
-    this.modelConfData.sttModel.value = e.detail.value;
+    this.modelConfData.sttModel = e.detail.value;
   }
 
   set_tts_model(e) {
-    this.modelConfData.ttsModel.value = e.detail.value;
+    console.log("set_tts_model: ", e)
+    this.modelConfData.ttsModel = e.detail.value;
   }
 
   save() {
