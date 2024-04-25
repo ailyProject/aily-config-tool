@@ -184,13 +184,18 @@ export class BleService {
 
   startLogSub(): void {
     BleClient.startNotifications(this.device.deviceId, this.serviceUUID, ailyLogUUID, (value) => {
+      // console.log('LogSub Received value: ', new TextDecoder("utf-8").decode(value))
       let data = new TextDecoder("utf-8").decode(value)
-      console.log('Received value', data)
-      if (data === '\n') {
-        this.ailyLogs.push(JSON.parse(this.tempLogData))
+      this.tempLogData += data;
+      if (this.tempLogData.endsWith('\n')) {
+        this.tempLogData = this.tempLogData.substring(0, this.tempLogData.length - 1)
+        // 按":"分割数据
+        let data = this.tempLogData.split(':')
+        this.ailyLogs.push({
+          "role": data[0],
+          "msg": data[1]
+        })
         this.tempLogData = ''
-      } else {
-        this.tempLogData += data;
       }
     })
   }
