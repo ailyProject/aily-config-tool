@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BleService } from 'src/app/services/ble.service';
 
 @Component({
   selector: 'app-chat-log',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChatLogPage implements OnInit {
 
-  constructor() { }
-
-  ngOnInit() {
+  get logList() {
+    return this.bleService.ailyLogs;
   }
 
+  constructor(
+    private bleService: BleService
+  ) { }
+
+  ngOnInit() {
+    this.bleService.startLogSub();
+  }
 }

@@ -9,6 +9,7 @@ import {
   serviceUUID,
   wifiUUID,
   ailyUUID,
+  ailyLogUUID
 } from '../configs/ble.config';
 // const bluetooth = (navigator as any).bluetooth;
 
@@ -18,6 +19,8 @@ import {
 export class BleService {
 
   wifiSetSuccess = new Subject();
+
+  ailyLogs: any = [];
 
   device = {
     name: null,
@@ -175,6 +178,19 @@ export class BleService {
     } catch (error) {
       console.log('send error: ', error)
     }
+  }
+
+  startLogSub(): void {
+    BleClient.startNotifications(this.device.deviceId, this.serviceUUID, ailyLogUUID, (value) => {
+      let data = new TextDecoder("utf-8").decode(value)
+      console.log('Received value', data)
+      this.ailyLogs.push(JSON.parse(data))
+    })
+  }
+
+
+  stopLogSub(): void {
+    BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, ailyLogUUID)
   }
 
 

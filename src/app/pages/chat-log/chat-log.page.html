@@ -9,11 +9,14 @@
 
 <ion-content [fullscreen]="true">
 <div>
-  <app-dialog [isMine]="true">dfd</app-dialog>
+  <div *ngFor="let message of logList">
+    <app-dialog [isMine]="message.role == 'user'">{{message.msg}}</app-dialog>
+  </div>
+  <!-- <app-dialog [isMine]="true">dfd</app-dialog>
   <app-dialog>huhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuah</app-dialog>
   <app-dialog [isMine]="true">huhuahuah</app-dialog>
   <app-dialog>huhuahuah</app-dialog>
   <app-dialog [isMine]="true">huhuahuah</app-dialog>
-  <app-dialog>huhuahuah</app-dialog>
+  <app-dialog>huhuahuah</app-dialog> -->
 </div>
 </ion-content>
