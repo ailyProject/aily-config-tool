@@ -36,7 +36,7 @@
       <ion-label>Speech Recognition</ion-label>
     </ion-item-divider>
     <ion-item>
-      <ion-select label="Model" placeholder="{{ modelConfData?.sttMode || '可用模型' }}" labelPlacement="floating" (ionChange)="set_stt_model($event)">
+      <ion-select label="Model" placeholder="{{ modelConfData?.sttModel || '可用模型' }}" labelPlacement="floating" (ionChange)="set_stt_model($event)">
         <ion-select-option value="{{item.value}}" *ngFor="let item of sttModelOptions">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
