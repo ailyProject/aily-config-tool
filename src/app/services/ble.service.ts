@@ -124,10 +124,36 @@ export class BleService {
     // })
   }
 
+  
+  llmModelOptions = '';
+
   async getModelOptions() {
     this.chrModelOptionsList.forEach(item => {
-      BleClient.read(this.device.deviceId, this.serviceUUID, item.uuid).then(value => {
-        this.dataCache[item.uuid] = JSON.parse(new TextDecoder("utf-8").decode(value))
+      BleClient.startNotifications(this.device.deviceId, this.serviceUUID, item.uuid, (value) => {
+        try {
+          let data = new TextDecoder("utf-8").decode(value)
+          console.log('Received value', data)
+          // if (item.name === 'llmModelOptions') {
+          //   this.llmModelOptions += data
+          // }
+          
+          // console.log('llmModelOptions: ', this.llmModelOptions)
+          // if (this.llmModelOptions.endsWith('\n')) {
+          //   console.log('stopNotifications, data: ', this.llmModelOptions)
+          // }
+          
+          // console.log('MO Received value: ', data)
+          // if (data !== '\n') {
+          //   let item_data = data.split(':')
+          //   console.log('item_data: ', item_data)
+          //   this.tempModelOptions[item.uuid].push({"name": item_data[0].toString(), "value": item_data[1].toString()})
+          // } else {
+          //   console.log('stopNotifications, data: ', this.tempModelOptions[item.uuid])
+          //   BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, item.uuid)
+          // }
+        } catch(e) {
+          console.error('getModelOptions error: ', e)
+        }
       })
     })
   }
