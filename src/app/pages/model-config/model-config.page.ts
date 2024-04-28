@@ -48,6 +48,11 @@ export class ModelConfigPage implements OnInit {
       this.modelConfData = modelData;
       console.log("modelConfData: ", this.modelConfData);
     });
+    this.bleService.ailyStatus.subscribe((data) => {
+      console.log('ailyStatus: ', data)
+      this.noticeService.hideLoading();
+      this.noticeService.showToast('success');
+    })
   }
 
   set_llm_model(e) {
@@ -64,8 +69,10 @@ export class ModelConfigPage implements OnInit {
   }
 
   save() {
+    this.noticeService.showLoading("Saving...");
+  
     if (this.bleService.sendModelData(this.modelConfData)) {
-      this.noticeService.showToast('success');
+      //
     } else {
       this.noticeService.showToast('error');
     }
