@@ -52,10 +52,12 @@ export class BleService {
   browserVersionError = false
 
   async init() {
-    await BleClient.initialize();
-    // if (!bluetooth) {
-    //   console.log('不支持的浏览器');
-    // }
+    console.log("ble init");
+    try {
+      await BleClient.initialize();
+    } catch (e) {
+      console.log("error: ", e)
+    }
   }
 
   async scan() {
@@ -64,6 +66,7 @@ export class BleService {
       this.scan_web()
       return
     }
+    console.log("Start scan")
     try {
       console.log('start scanning');
       await BleClient.requestLEScan(

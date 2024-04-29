@@ -27,6 +27,7 @@ export class HomePage {
 
   async scanDevice() {
     await this.bleService.init();
+    console.log("inited")
     this.bleService.scan();
   }
 
