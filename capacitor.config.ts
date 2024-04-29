@@ -4,7 +4,7 @@ const config: CapacitorConfig = {
   appId: 'tool.aily.pro',
   appName: 'aily Config Tool',
   webDir: 'www',
-  bundledWebRuntime: true,
+  bundledWebRuntime: false,
   server: {
     androidScheme: 'https'
   }

@@ -52,7 +52,13 @@ export class BleService {
   browserVersionError = false
 
   async init() {
-    await BleClient.initialize({ androidNeverForLocation: true });
+    console.log("ble init");
+    try {
+      await BleClient.initialize();
+    } catch (e) {
+      console.log("error: ", e)
+    }
+    
     // if (!bluetooth) {
     //   console.log('不支持的浏览器');
     // }
@@ -60,10 +66,11 @@ export class BleService {
 
   async scan() {
     // PC端 or PWA
-    if (this.platform.is('desktop') || this.platform.is('mobileweb')) {
-      this.scan_web()
-      return
-    }
+    // if (this.platform.is('desktop') || this.platform.is('mobileweb')) {
+    //   this.scan_web()
+    //   return
+    // }
+    console.log("Start scan")
     try {
       await BleClient.requestLEScan(
         {
