@@ -1,0 +1,11 @@
+<div class="modal-inner">
+  <div class="title">Nearby Devices</div>
+  <ion-list class="list-inset">
+    <ion-item *ngFor="let device of deviceList" (click)="select(device)">
+      <ion-label>
+        <h3>{{device.device.name?device.device.name:'Unknow Device'}}</h3>
+        <p>{{device.device.deviceId}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</div>

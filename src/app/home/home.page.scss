@@ -1,28 +1,18 @@
 .header {
   display: flex;
-  flex-direction: column;
+  // flex-direction: column;
   align-items: center;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #DDD;
+  justify-content: center;
   position: relative;
 
   img {
-    height: 35px;
+    height: 30px;
+    margin-right: 6px;
   }
 
   .text {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
-  }
-
-  .scan{
-    position: absolute;
-    right: 15px;
-    bottom: 0;
-
-    &.wait{
-      --background: #ccc;
-    }
   }
 }
 

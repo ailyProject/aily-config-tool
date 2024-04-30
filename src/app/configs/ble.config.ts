@@ -57,13 +57,13 @@ export const CharacteristicList = [
     },
     {
         name: "CPU Usage",
-        icon: "fa-light fa-temperature-three-quarters",
+        icon: "fa-light fa-gauge",
         unit: "%",
         uuid: "123e4567-e89b-12d3-a456-426614174006"
     },
     {
         name: "CPU Tempture",
-        icon: "fa-light fa-gauge",
+        icon: "fa-light fa-temperature-three-quarters",
         unit: "℃",
         uuid: "123e4567-e89b-12d3-a456-426614174005"
     },

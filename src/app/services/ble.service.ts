@@ -35,6 +35,8 @@ export class BleService {
     value: null
   };
 
+  deviceList = [];
+
   serviceUUID = serviceUUID
   characteristicList = CharacteristicList
   chrModelOptionsList = ChrModelOptionsList
@@ -62,11 +64,6 @@ export class BleService {
 
   async scan() {
     // PC端 or PWA
-    if (this.platform.is('desktop') || this.platform.is('mobileweb')) {
-      this.scan_web()
-      return
-    }
-    console.log("Start scan")
     try {
       console.log('start scanning');
       await BleClient.requestLEScan(
@@ -74,14 +71,14 @@ export class BleService {
           services: [this.serviceUUID],
         },
         (result) => {
-          console.log('received new scan result', result);
+          this.deviceList.push(result);
         }
       );
 
-      // setTimeout(async () => {
-      //   await BleClient.stopLEScan();
-      //   console.log('stopped scanning');
-      // }, 5000);
+      setTimeout(async () => {
+        await BleClient.stopLEScan();
+        console.log('stopped scanning');
+      }, 9000);
     } catch (error) {
       console.error(error);
     }

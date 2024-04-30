@@ -21,7 +21,7 @@ ionic build
 
 ### android/ios端编译
 ```
-npm run sync
+npm run android/ios
 ```
 然后在android studio/xcode中编译打包  
 

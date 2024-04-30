@@ -1,12 +1,16 @@
 <ion-header>
   <ion-toolbar>
-    <div class="header">
-      <img src="assets/logo.webp" alt="">
-      <div class="text">Config Tool</div>
-      <ion-button class="scan" [ngClass]="{'wait': !device.name}" (click)="scanDevice()">
+    <ion-title>
+      <div class="header">
+        <img src="assets/logo.webp" alt="">
+        <div class="text">Config Tool</div>
+      </div>
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button class="scan" (click)="scanDevice()">
         <i class="fa-regular fa-magnifying-glass"></i>
       </ion-button>
-    </div>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content [fullscreen]="true">
