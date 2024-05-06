@@ -47,7 +47,7 @@
 	<true/>
 	<!-- Bluetooth Permissions -->
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Uses Bluetooth to connect and interact with GoPro</string>
+	<string>Uses Bluetooth to connect and interact with Aily</string>
     <key>NSBluetoothPeripheralUsageDescription</key>
     <string>Need BLE permission</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
