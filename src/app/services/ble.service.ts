@@ -359,6 +359,10 @@ export class BleService {
     console.log('connected to device', device);
   }
 
+  onConnect(deviceId: string): void {
+    console.log(`device ${deviceId} connected`);
+  }
+
   onDisconnect(deviceId: string): void {
     console.log(`device ${deviceId} disconnected`);
   }
