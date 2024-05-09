@@ -142,34 +142,22 @@ export class BleService {
   }
 
   async getLLMModelOptions() {
-    let data: string = '';
-    BleClient.read(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID,).then((value) => {
-      let tempData = new TextDecoder("utf-8").decode(value)
-      if (tempData === '\n') {
-        console.log("llmModelOptions: ", data)
-        this.dataCache[llmModelOptionsUUID] = data;
-        return
+    BleClient.startNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID, (value) => {
+      try {
+        let data = new TextDecoder("utf-8").decode(value)
+        console.log('Received value', data)
+        if (data !== 'EOF') {
+            let [name, value] = this.splitData(data)
+            this.llmModelOptions.push({"name": name, "value": value})
+        } else {
+          BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID)
+          console.log('llmModelOptions: ', this.llmModelOptions)
+          this.dataCache[llmModelOptionsUUID] = this.llmModelOptions
+        }
+      } catch(e) {
+        console.error('getLLMModelOptions error: ', e)
       }
-      data += tempData
     })
-    // BleClient.startNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID, (value) => {
-    //   try {
-    //     let data = new TextDecoder("utf-8").decode(value)
-    //     console.log('Received value', data)
-    //     if (data !== '\n') {
-    //       if (data !== '[]') {
-    //         let [name, value] = this.splitData(data)
-    //         this.llmModelOptions.push({"name": name, "value": value})
-    //       }
-    //     } else {
-    //       BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID)
-    //       console.log('llmModelOptions: ', this.llmModelOptions)
-    //       this.dataCache[llmModelOptionsUUID] = this.llmModelOptions
-    //     }
-    //   } catch(e) {
-    //     console.error('getLLMModelOptions error: ', e)
-    //   }
-    // })
   }
 
   async getSTTModelOptions() {
@@ -177,11 +165,9 @@ export class BleService {
       try {
         let data = new TextDecoder("utf-8").decode(value)
         console.log('Received value', data)
-        if (data !== '\n') {
-          if (data !== '[]') {
+        if (data !== 'EOF') {
             let [name, value] = this.splitData(data)
             this.sttModelOptions.push({"name": name, "value": value})
-          }
         } else {
           BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, sttModelOptionsUUID)
           console.log('sttModelOptions: ', this.sttModelOptions)
@@ -198,11 +184,9 @@ export class BleService {
       try {
         let data = new TextDecoder("utf-8").decode(value)
         console.log('Received value', data)
-        if (data !== '\n') {
-          if (data !== '[]') {
+        if (data !== 'EOF') {
             let [name, value] = this.splitData(data)
             this.ttsModelOptions.push({"name": name, "value": value})
-          }
         } else {
           BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, ttsModelOptionsUUID)
           console.log('ttsModelOptions: ', this.ttsModelOptions)
@@ -341,17 +325,33 @@ export class BleService {
   startLogSub(): void {
     BleClient.startNotifications(this.device.deviceId, this.serviceUUID, ailyLogUUID, (value) => {
       // console.log('LogSub Received value: ', new TextDecoder("utf-8").decode(value))
-      let data = new TextDecoder("utf-8").decode(value)
-      this.tempLogData += data;
-      if (this.tempLogData.endsWith('\n')) {
-        this.tempLogData = this.tempLogData.substring(0, this.tempLogData.length - 1)
-        // 按":"分割数据
-        let data = this.tempLogData.split(':')
-        this.ailyLogs.push({
-          "role": data[0],
-          "msg": data[1]
-        })
-        this.tempLogData = ''
+      // let data = new TextDecoder("utf-8").decode(value)
+      // this.tempLogData += data;
+      // if (this.tempLogData.endsWith('\n')) {
+      //   this.tempLogData = this.tempLogData.substring(0, this.tempLogData.length - 1)
+      //   // 按":"分割数据
+      //   let data = this.tempLogData.split(':')
+      //   this.ailyLogs.push({
+      //     "role": data[0],
+      //     "msg": data[1]
+      //   })
+      //   this.tempLogData = ''
+      // }
+
+      try {
+        let data = new TextDecoder("utf-8").decode(value)
+        if (data !== 'EOF') {
+          this.tempLogData += data;
+        } else {
+          let tempData = data.split(":");
+          this.ailyLogs.push({
+            "role": tempData[0],
+            "msg": tempData[1]
+          })
+          this.tempLogData = '';
+        }
+      } catch (e) {
+        console.log("Log get error: ", e);
       }
     })
   }
@@ -385,9 +385,9 @@ export class BleService {
     });
 
     this.getLLMModelOptions();
-    // this.getSTTModelOptions();
-    // this.getTTSModelOptions();
-    // this.getAilyStatus();
+    this.getSTTModelOptions();
+    this.getTTSModelOptions();
+    this.getAilyStatus();
   }
 
   onDisconnect(deviceId: string): void {

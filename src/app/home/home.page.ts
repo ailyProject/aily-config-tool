@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { CharacteristicList } from '../configs/ble.config';
 import { BleService } from '../services/ble.service';
 import { ModalController, Platform } from '@ionic/angular';
@@ -26,8 +26,13 @@ export class HomePage {
   constructor(
     private bleService: BleService,
     private modalCtrl: ModalController,
-    private platform: Platform
+    private platform: Platform,
+    private cd:ChangeDetectorRef
   ) { }
+
+  ngOnInit() {
+    this.refresh();
+  }
 
   async scanDevice() {
     await this.bleService.init();
@@ -38,6 +43,12 @@ export class HomePage {
       this.openScanModal();
     }
     // this.openScanModal();
+  }
+
+  async refresh() {
+    setInterval(() => {
+      this.cd.detectChanges()
+    }, 1000)
   }
 
   async openScanModal() {
