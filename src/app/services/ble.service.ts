@@ -142,8 +142,15 @@ export class BleService {
   }
 
   async getLLMModelOptions() {
+    let data: string = '';
     BleClient.read(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID,).then((value) => {
-      let tempValue = '';
+      let tempData = new TextDecoder("utf-8").decode(value)
+      if (tempData === '\n') {
+        console.log("llmModelOptions: ", data)
+        this.dataCache[llmModelOptionsUUID] = data;
+        return
+      }
+      data += tempData
     })
     // BleClient.startNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID, (value) => {
     //   try {
