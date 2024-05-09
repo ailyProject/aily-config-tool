@@ -89,8 +89,6 @@ export class BleService {
       services: [this.serviceUUID],
     }).then(async device => {
       console.log(device);
-      this.device.deviceId = device.name
-      this.device.deviceId = device.deviceId
       await BleClient.connect(device.deviceId, (deviceId) => this.onDisconnect(deviceId));
       this.characteristicList.forEach(item => {
         BleClient.read(device.deviceId, this.serviceUUID, item.uuid).then(value => {
@@ -144,24 +142,27 @@ export class BleService {
   }
 
   async getLLMModelOptions() {
-    BleClient.startNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID, (value) => {
-      try {
-        let data = new TextDecoder("utf-8").decode(value)
-        console.log('Received value', data)
-        if (data !== '\n') {
-          if (data !== '[]') {
-            let [name, value] = this.splitData(data)
-            this.llmModelOptions.push({"name": name, "value": value})
-          }
-        } else {
-          BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID)
-          console.log('llmModelOptions: ', this.llmModelOptions)
-          this.dataCache[llmModelOptionsUUID] = this.llmModelOptions
-        }
-      } catch(e) {
-        console.error('getLLMModelOptions error: ', e)
-      }
+    BleClient.read(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID,).then((value) => {
+      let tempValue = '';
     })
+    // BleClient.startNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID, (value) => {
+    //   try {
+    //     let data = new TextDecoder("utf-8").decode(value)
+    //     console.log('Received value', data)
+    //     if (data !== '\n') {
+    //       if (data !== '[]') {
+    //         let [name, value] = this.splitData(data)
+    //         this.llmModelOptions.push({"name": name, "value": value})
+    //       }
+    //     } else {
+    //       BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID)
+    //       console.log('llmModelOptions: ', this.llmModelOptions)
+    //       this.dataCache[llmModelOptionsUUID] = this.llmModelOptions
+    //     }
+    //   } catch(e) {
+    //     console.error('getLLMModelOptions error: ', e)
+    //   }
+    // })
   }
 
   async getSTTModelOptions() {
@@ -355,12 +356,31 @@ export class BleService {
 
 
   async connect(device) {
-    await BleClient.connect(device.deviceId);
+    await BleClient.connect(
+      device.deviceId, 
+      (deviceId) => this.onDisconnect(deviceId)
+    );
     console.log('connected to device', device);
-  }
+    this.device.deviceId = device.name
+    this.device.deviceId = device.deviceId
 
-  onConnect(deviceId: string): void {
-    console.log(`device ${deviceId} connected`);
+    this.characteristicList.forEach(item => {
+      BleClient.read(device.deviceId, this.serviceUUID, item.uuid).then(value => {
+        this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
+      })
+      BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
+        // console.log(item.uuid, '->Received value', new TextDecoder("utf-8").decode(value))
+        this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
+        if (item.uuid === "123e4567-e89b-12d3-a456-426614174004") {
+          this.wifiSetSuccess.next("success")
+        }
+      })
+    });
+
+    this.getLLMModelOptions();
+    // this.getSTTModelOptions();
+    // this.getTTSModelOptions();
+    // this.getAilyStatus();
   }
 
   onDisconnect(deviceId: string): void {

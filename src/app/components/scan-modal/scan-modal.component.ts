@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import { BleService } from 'src/app/services/ble.service';
+import { NoticeService } from 'src/app/services/notice.service';
 
 @Component({
   selector: 'app-scan-modal',
@@ -21,7 +23,9 @@ export class ScanModalComponent implements OnInit {
   // ]
 
   constructor(
-    private bleService: BleService
+    private bleService: BleService,
+    private notice: NoticeService,
+    private modelCtl: ModalController
   ) { }
 
   ngOnInit() {
@@ -29,6 +33,7 @@ export class ScanModalComponent implements OnInit {
   }
 
   scan() {
+    this.bleService.deviceList = [];
     this.bleService.scan()
   }
 
@@ -38,7 +43,12 @@ export class ScanModalComponent implements OnInit {
   }
 
   select(device) {
-    this.bleService.connect(device.device)
+    console.log("选择设备: ", device)
+    this.notice.showLoading("连接中...")
+    this.bleService.connect(device.device).then(res => {
+      this.modelCtl.dismiss();
+      this.notice.hideLoading();
+    })
   }
 
 }
