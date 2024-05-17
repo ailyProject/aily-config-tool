@@ -17,6 +17,6 @@ export class ChatLogPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.bleService.startLogSub();
+    this.bleService.startGetLog();
   }
 }

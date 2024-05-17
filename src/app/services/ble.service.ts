@@ -91,15 +91,18 @@ export class BleService {
       console.log(device);
       await BleClient.connect(device.deviceId, (deviceId) => this.onDisconnect(deviceId));
       this.characteristicList.forEach(item => {
-        BleClient.read(device.deviceId, this.serviceUUID, item.uuid).then(value => {
-          this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
-        })
+        // BleClient.read(device.deviceId, this.serviceUUID, item.uuid).then(value => {
+        //   this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
+        // })
         BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
           // console.log(item.uuid, '->Received value', new TextDecoder("utf-8").decode(value))
-          this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
-          if (item.uuid === "123e4567-e89b-12d3-a456-426614174004") {
-            this.wifiSetSuccess.next("success")
-          }
+          let oldData = this.dataCache[item.uuid]
+          let newData = new TextDecoder("utf-8").decode(value)
+
+          this.dataCache[item.uuid] = newData
+          // if (item.uuid === "123e4567-e89b-12d3-a456-426614174004" && oldData != newData) {
+          //   this.wifiSetSuccess.next("success")
+          // }
         })
       });
 
@@ -142,60 +145,69 @@ export class BleService {
   }
 
   async getLLMModelOptions() {
-    BleClient.startNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID, (value) => {
-      try {
-        let data = new TextDecoder("utf-8").decode(value)
-        console.log('Received value', data)
-        if (data !== 'EOF') {
-            let [name, value] = this.splitData(data)
-            this.llmModelOptions.push({"name": name, "value": value})
-        } else {
-          BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID)
-          console.log('llmModelOptions: ', this.llmModelOptions)
-          this.dataCache[llmModelOptionsUUID] = this.llmModelOptions
-        }
-      } catch(e) {
-        console.error('getLLMModelOptions error: ', e)
-      }
+    BleClient.read(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID).then(value => {
+      this.dataCache[llmModelOptionsUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
     })
+    // BleClient.startNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID, (value) => {
+    //   try {
+    //     let data = new TextDecoder("utf-8").decode(value)
+    //     console.log('Received value', data)
+    //     if (data !== 'EOF') {
+    //         let [name, value] = this.splitData(data)
+    //         this.llmModelOptions.push({"name": name, "value": value})
+    //     } else {
+    //       BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID)
+    //       console.log('llmModelOptions: ', this.llmModelOptions)
+    //       this.dataCache[llmModelOptionsUUID] = this.llmModelOptions
+    //     }
+    //   } catch(e) {
+    //     console.error('getLLMModelOptions error: ', e)
+    //   }
+    // })
   }
 
   async getSTTModelOptions() {
-    BleClient.startNotifications(this.device.deviceId, this.serviceUUID, sttModelOptionsUUID, (value) => {
-      try {
-        let data = new TextDecoder("utf-8").decode(value)
-        console.log('Received value', data)
-        if (data !== 'EOF') {
-            let [name, value] = this.splitData(data)
-            this.sttModelOptions.push({"name": name, "value": value})
-        } else {
-          BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, sttModelOptionsUUID)
-          console.log('sttModelOptions: ', this.sttModelOptions)
-          this.dataCache[sttModelOptionsUUID] = this.sttModelOptions
-        }
-      } catch(e) {
-        console.error('getSTTModelOptions error: ', e)
-      }
+    BleClient.read(this.device.deviceId, this.serviceUUID, sttModelOptionsUUID).then(value => {
+      this.dataCache[sttModelOptionsUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
     })
+    // BleClient.startNotifications(this.device.deviceId, this.serviceUUID, sttModelOptionsUUID, (value) => {
+    //   try {
+    //     let data = new TextDecoder("utf-8").decode(value)
+    //     console.log('Received value', data)
+    //     if (data !== 'EOF') {
+    //         let [name, value] = this.splitData(data)
+    //         this.sttModelOptions.push({"name": name, "value": value})
+    //     } else {
+    //       BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, sttModelOptionsUUID)
+    //       console.log('sttModelOptions: ', this.sttModelOptions)
+    //       this.dataCache[sttModelOptionsUUID] = this.sttModelOptions
+    //     }
+    //   } catch(e) {
+    //     console.error('getSTTModelOptions error: ', e)
+    //   }
+    // })
   }
 
   async getTTSModelOptions() {
-    BleClient.startNotifications(this.device.deviceId, this.serviceUUID, ttsModelOptionsUUID, (value) => {
-      try {
-        let data = new TextDecoder("utf-8").decode(value)
-        console.log('Received value', data)
-        if (data !== 'EOF') {
-            let [name, value] = this.splitData(data)
-            this.ttsModelOptions.push({"name": name, "value": value})
-        } else {
-          BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, ttsModelOptionsUUID)
-          console.log('ttsModelOptions: ', this.ttsModelOptions)
-          this.dataCache[ttsModelOptionsUUID] = this.ttsModelOptions
-        }
-      } catch(e) {
-        console.error('getTTSModelOptions error: ', e)
-      }
+    BleClient.read(this.device.deviceId, this.serviceUUID, ttsModelOptionsUUID).then(value => {
+      this.dataCache[ttsModelOptionsUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
     })
+    // BleClient.startNotifications(this.device.deviceId, this.serviceUUID, ttsModelOptionsUUID, (value) => {
+    //   try {
+    //     let data = new TextDecoder("utf-8").decode(value)
+    //     console.log('Received value', data)
+    //     if (data !== 'EOF') {
+    //         let [name, value] = this.splitData(data)
+    //         this.ttsModelOptions.push({"name": name, "value": value})
+    //     } else {
+    //       BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, ttsModelOptionsUUID)
+    //       console.log('ttsModelOptions: ', this.ttsModelOptions)
+    //       this.dataCache[ttsModelOptionsUUID] = this.ttsModelOptions
+    //     }
+    //   } catch(e) {
+    //     console.error('getTTSModelOptions error: ', e)
+    //   }
+    // })
   }
 
   async getAilyStatus() {
@@ -322,6 +334,18 @@ export class BleService {
 
   tempLogData = '';
 
+  startGetLog() {
+    if (this.ailyLogs.length === 0) {
+      BleClient.read(this.device.deviceId, this.serviceUUID, ailyLogUUID).then(value => {
+        try {
+          let data = new TextDecoder("utf-8").decode(value);
+        } catch (e) {
+          console.log("Log get error: ", e);
+        }
+      })
+    }
+  }
+
   startLogSub(): void {
     BleClient.startNotifications(this.device.deviceId, this.serviceUUID, ailyLogUUID, (value) => {
       // console.log('LogSub Received value: ', new TextDecoder("utf-8").decode(value))
@@ -339,17 +363,19 @@ export class BleService {
       // }
 
       try {
-        let data = new TextDecoder("utf-8").decode(value)
-        if (data !== 'EOF') {
-          this.tempLogData += data;
-        } else {
-          let tempData = data.split(":");
-          this.ailyLogs.push({
-            "role": tempData[0],
-            "msg": tempData[1]
-          })
-          this.tempLogData = '';
-        }
+        let data = new TextDecoder("utf-8").decode(value);
+        
+        this.ailyLogs.push(JSON.parse(data))
+        // if (data !== 'EOF') {
+        //   this.tempLogData += data;
+        // } else {
+        //   let tempData = data.split(":");
+        //   this.ailyLogs.push({
+        //     "role": tempData[0],
+        //     "msg": tempData[1]
+        //   })
+        //   this.tempLogData = '';
+        // }
       } catch (e) {
         console.log("Log get error: ", e);
       }
@@ -367,19 +393,24 @@ export class BleService {
       device.deviceId, 
       (deviceId) => this.onDisconnect(deviceId)
     );
+    this.dataCache = {};
     console.log('connected to device', device);
     this.device.deviceId = device.name
     this.device.deviceId = device.deviceId
 
     this.characteristicList.forEach(item => {
-      BleClient.read(device.deviceId, this.serviceUUID, item.uuid).then(value => {
-        this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
-      })
+      // BleClient.read(device.deviceId, this.serviceUUID, item.uuid).then(value => {
+      //   this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
+      // })
       BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
         // console.log(item.uuid, '->Received value', new TextDecoder("utf-8").decode(value))
-        this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
-        if (item.uuid === "123e4567-e89b-12d3-a456-426614174004") {
-          this.wifiSetSuccess.next("success")
+        // this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
+        let oldData = this.dataCache[item.uuid]
+        let newData = new TextDecoder("utf-8").decode(value)
+
+        this.dataCache[item.uuid] = newData
+        if (item.uuid === "123e4567-e89b-12d3-a456-426614174004" && oldData != newData) {
+          this.wifiSetSuccess.next("success")     
         }
       })
     });
@@ -387,6 +418,7 @@ export class BleService {
     this.getLLMModelOptions();
     this.getSTTModelOptions();
     this.getTTSModelOptions();
+    this.startLogSub();
     this.getAilyStatus();
   }
 
