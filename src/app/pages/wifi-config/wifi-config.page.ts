@@ -18,9 +18,15 @@ export class WifiConfigPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.bleService.wifiSetSuccess.subscribe(() => {
-      this.noticeService.hideLoading();
-      this.noticeService.showToast('Wifi设置成功');
+    this.bleService.updateRes.subscribe((data) => {
+      if (data["type"] === 'wifi') {
+        this.noticeService.hideLoading();
+        if (data["status"] === 1) {
+          this.noticeService.showToast('Wifi设置成功');
+        } else {
+          this.noticeService.showToast('Wifi设置失败');
+        }
+      }
     })
   }
 

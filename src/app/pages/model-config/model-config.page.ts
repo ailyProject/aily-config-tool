@@ -48,10 +48,15 @@ export class ModelConfigPage implements OnInit {
       this.modelConfData = modelData;
       console.log("modelConfData: ", this.modelConfData);
     });
-    this.bleService.ailyStatus.subscribe((data) => {
-      console.log('ailyStatus: ', data)
-      this.noticeService.hideLoading();
-      this.noticeService.showToast('success');
+    this.bleService.updateRes.subscribe((data) => {
+      if (data["type"] === 'aily') {
+        this.noticeService.hideLoading();
+        if (data["status"] === 1) {
+          this.noticeService.showToast('Model setting success');
+        } else {
+          this.noticeService.showToast('Model setting failed');
+        }
+      }
     })
   }
 
