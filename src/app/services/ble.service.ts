@@ -14,6 +14,7 @@ import {
   sttModelOptionsUUID,
   ttsModelOptionsUUID,
   ailyStatusUUID,
+  updateResUUID
 } from '../configs/ble.config';
 // const bluetooth = (navigator as any).bluetooth;
 
@@ -24,6 +25,8 @@ export class BleService {
 
   wifiSetSuccess = new Subject();
   ailyStatus = new Subject();
+
+  updateRes = new Subject();
 
   ailyLogs: any = [];
 
@@ -215,9 +218,23 @@ export class BleService {
       try {
         let data = new TextDecoder("utf-8").decode(value)
         console.log('Aily status Received value: ', data)
-        this.ailyStatus.next(data)
+        // this.ailyStatus.next(data)
+        this.dataCache[ailyStatusUUID] = data
       } catch(e) {
         console.error('getAilyStatus error: ', e)
+      }
+    })
+  }
+
+  async getUpdateRes() {
+    BleClient.startNotifications(this.device.deviceId, this.serviceUUID, updateResUUID, (value) => {
+      try {
+        // {"type": "wifi", "status": "-2/-1/1"}, {"type": "aily", "status": "0/1"}
+        let data = new TextDecoder("utf-8").decode(value)
+        console.log('Update res Received value: ', data)
+        this.updateRes.next(JSON.parse(data))
+      } catch(e) {
+        console.error('getUpdateRes error: ', e)
       }
     })
   }
@@ -365,17 +382,14 @@ export class BleService {
       try {
         let data = new TextDecoder("utf-8").decode(value);
         
-        this.ailyLogs.push(JSON.parse(data))
-        // if (data !== 'EOF') {
-        //   this.tempLogData += data;
-        // } else {
-        //   let tempData = data.split(":");
-        //   this.ailyLogs.push({
-        //     "role": tempData[0],
-        //     "msg": tempData[1]
-        //   })
-        //   this.tempLogData = '';
-        // }
+        // this.ailyLogs.push(JSON.parse(data))
+        if (data !== 'EOF') {
+          this.tempLogData += data;
+        } else {
+          let tempData = JSON.parse(this.tempLogData);
+          this.ailyLogs.push(tempData);
+          this.tempLogData = '';
+        }
       } catch (e) {
         console.log("Log get error: ", e);
       }
@@ -405,13 +419,14 @@ export class BleService {
       BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
         // console.log(item.uuid, '->Received value', new TextDecoder("utf-8").decode(value))
         // this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
-        let oldData = this.dataCache[item.uuid]
-        let newData = new TextDecoder("utf-8").decode(value)
+        // let oldData = this.dataCache[item.uuid]
+        // let newData = new TextDecoder("utf-8").decode(value)
 
-        this.dataCache[item.uuid] = newData
-        if (item.uuid === "123e4567-e89b-12d3-a456-426614174004" && oldData != newData) {
-          this.wifiSetSuccess.next("success")     
-        }
+        this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
+        // if (item.uuid === "123e4567-e89b-12d3-a456-426614174004" && oldData != newData) {
+        //   this.wifiSetSuccess.next("success")     
+        // }
+
       })
     });
 
@@ -420,6 +435,7 @@ export class BleService {
     this.getTTSModelOptions();
     this.startLogSub();
     this.getAilyStatus();
+    this.getUpdateRes();
   }
 
   onDisconnect(deviceId: string): void {
