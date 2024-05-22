@@ -18,5 +18,10 @@
   <app-dialog>huhuahuah</app-dialog>
   <app-dialog [isMine]="true">huhuahuah</app-dialog>
   <app-dialog>huhuahuah</app-dialog> -->
+  <ion-infinite-scroll (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </div>
+
 </ion-content>

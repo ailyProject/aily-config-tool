@@ -16,7 +16,16 @@ export class ChatLogPage implements OnInit {
     private bleService: BleService
   ) { }
 
+  loadData(event) {
+    console.log("loadData")
+    setTimeout(() => {
+      this.bleService.startGetLog();
+      event.target.complete();
+    }, 500);
+  }
+
   ngOnInit() {
     this.bleService.startGetLog();
+    // this.bleService.startLogSub();
   }
 }
