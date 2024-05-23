@@ -13,8 +13,8 @@
       <ion-label>Large Language</ion-label>
     </ion-item-divider>
     <ion-item>
-      <ion-select label="Model" placeholder="{{ modelConfData?.llmModel }}" labelPlacement="floating" (ionChange)="set_llm_model($event)">
-        <ion-select-option *ngFor="let item of llmModelOptions">{{item.name}}</ion-select-option>
+      <ion-select label="Model" value="modelConfData?.llmModel" placeholder="{{ modelConfData?.llmModel }}" labelPlacement="floating" (ionChange)="set_llm_model($event)">
+        <ion-select-option *ngFor="let item of llmModelOptions" value="{{item.value}}||{{item.server}}">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
@@ -37,7 +37,7 @@
     </ion-item-divider>
     <ion-item>
       <ion-select label="Model" placeholder="{{ modelConfData?.sttModel || '可用模型' }}" labelPlacement="floating" (ionChange)="set_stt_model($event)">
-        <ion-select-option value="{{item.value}}" *ngFor="let item of sttModelOptions">{{item.name}}</ion-select-option>
+        <ion-select-option value="{{item.value}}||{{item.server}}" *ngFor="let item of sttModelOptions">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
@@ -50,7 +50,7 @@
     </ion-item-divider>
     <ion-item>
       <ion-select label="Model" placeholder="{{ modelConfData?.ttsModel || '可用模型' }}" labelPlacement="floating" (ionChange)="set_tts_model($event)">
-        <ion-select-option value="{{item.value}}" *ngFor="let item of ttsModelOptions">{{item.name}}</ion-select-option>
+        <ion-select-option value="{{item.value}}||{{item.server}}" *ngFor="let item of ttsModelOptions">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>

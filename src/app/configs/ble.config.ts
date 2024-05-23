@@ -25,7 +25,7 @@ export const ChrModelConfList = [
     { name: "llmKey", uuid: "123e4567-e89b-12d3-a456-00805f9b34fd" },
     { name: "llmPrePrompt", uuid: "123e4567-e89b-12d3-a456-00805f9b34fe" },
     { name: "llmTemp", uuid: "123e4567-e89b-12d3-a456-00805f9b34ff" },
-    { name: "sttURL", uuid: "123e4567-e89b-12d3-a456-00805f9b350c"}
+    { name: "sttURL", uuid: "123e4567-e89b-12d3-a456-00805f9b350c"},
     { name: "sttModel", uuid: "123e4567-e89b-12d3-a456-00805f9b3501" },
     { name: "sttKey", uuid: "123e4567-e89b-12d3-a456-00805f9b3502" },
     { name: "ttsURL", uuid: "123e4567-e89b-12d3-a456-00805f9b350d"},

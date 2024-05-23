@@ -143,9 +143,9 @@ export class BleService {
   sttModelOptions = [];
   ttsModelOptions = [];
 
-  splitData(data, splitStr=":") {
+  splitData(data, splitStr="||") {
     let dataArr = data.split(splitStr)
-    return [dataArr[0], dataArr[1]]
+    return [dataArr[0], dataArr[1], dataArr[2]]
   }
 
   async getLLMModelOptions() {
@@ -158,8 +158,8 @@ export class BleService {
         console.log('Received value', data)
         if (data !== "None") {
           if (data !== 'EOF') {
-            let [name, value] = this.splitData(data)
-            this.llmModelOptions.push({"name": name, "value": value})
+            let [name, value, server] = this.splitData(data)
+            this.llmModelOptions.push({"name": name, "value": value, "server": server})
           } else {
             try {
               console.log("llmModelOptions: ", this.llmModelOptions)
@@ -192,8 +192,8 @@ export class BleService {
         console.log('Received value', data)
         if (data !== 'None') {
           if (data !== 'EOF') {
-            let [name, value] = this.splitData(data)
-            this.sttModelOptions.push({"name": name, "value": value})
+            let [name, value, server] = this.splitData(data)
+            this.sttModelOptions.push({"name": name, "value": value, "server": server})
           } else {
             try {
               console.log("sttModelOptions: ", this.sttModelOptions)
@@ -224,8 +224,8 @@ export class BleService {
         console.log('Received value', data)
         if (data !== 'None') {
           if (data !== 'EOF') {
-            let [name, value] = this.splitData(data)
-            this.ttsModelOptions.push({"name": name, "value": value})
+            let [name, value, server] = this.splitData(data)
+            this.ttsModelOptions.push({"name": name, "value": value, "server": server})
           } else {
             try {
               console.log("ttsModelOptions: ", this.ttsModelOptions)

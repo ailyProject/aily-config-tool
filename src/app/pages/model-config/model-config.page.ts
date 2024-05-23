@@ -64,16 +64,25 @@ export class ModelConfigPage implements OnInit {
   }
 
   set_llm_model(e) {
-    this.modelConfData.llmModel = e.detail.value;
+    let data = e.detail.value;
+    let dataArr = data.split("||")
+    this.modelConfData.llmModel = dataArr[0];
+    this.modelConfData.llmURL = dataArr[1];
   }
 
   set_stt_model(e) {
-    this.modelConfData.sttModel = e.detail.value;
+    let data = e.detail.value;
+    let dataArr = data.split("||")
+    this.modelConfData.sttModel = dataArr[0];
+    this.modelConfData.sttURL = dataArr[1];
   }
 
   set_tts_model(e) {
     console.log("set_tts_model: ", e)
-    this.modelConfData.ttsModel = e.detail.value;
+    let data = e.detail.value;
+    let dataArr = data.split("||")
+    this.modelConfData.ttsModel = dataArr[0];
+    this.modelConfData.ttsURL = dataArr[1];
   }
 
   save() {
