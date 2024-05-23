@@ -25,12 +25,15 @@ export class ModelConfigPage implements OnInit {
 
   modelConfData: any =
     {
+      "llmURL": "",
       "llmModel": "",
       "llmKey": "",
       "llmPrePrompt": "",
       "llmTemp": "",
+      "sttURL": "",
       "sttModel": "",
       "sttKey": "",
+      "ttsURL": "",
       "ttsModel": "",
       "ttsKey": "",
       "ttsRole": ""
