@@ -23,8 +23,10 @@ export class WifiConfigPage implements OnInit {
         this.noticeService.hideLoading();
         if (data["status"] === 1) {
           this.noticeService.showToast('Wifi设置成功');
+        } else if (data["status"] === -1) {
+          this.noticeService.showToast('Wifi设置失败: SSID未找到');
         } else {
-          this.noticeService.showToast('Wifi设置失败');
+          this.noticeService.showToast('Wifi设置失败: 未知错误');
         }
       }
     })
