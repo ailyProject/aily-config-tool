@@ -25,6 +25,8 @@ export class ModelConfigPage implements OnInit {
   // }
 
   llmModelOptions: any = []
+  sttModelOptions: any = []
+  ttsModelOptions: any = []
 
   modelConfData: any =
     {
@@ -46,7 +48,8 @@ export class ModelConfigPage implements OnInit {
   constructor(
     private bleService: BleService,
     private noticeService: NoticeService,
-    private httpService: HttpService
+    private httpService: HttpService,
+    private cd: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
@@ -74,7 +77,14 @@ export class ModelConfigPage implements OnInit {
   getLLMModelOptions() {
     if (this.bleService.ip) {
       try {
-        this.httpService.getLLMModelOptions(this.bleService.ip).subscribe(res => {});
+        this.httpService.getLLMModelOptions(this.bleService.ip).subscribe(res => {
+          if (res.status === 200) {
+            this.llmModelOptions = res.data;
+            this.cd.detectChanges();
+          } else {
+            console.log("getLLMModelOptions failed");
+          }
+        });
       } catch {
         this.bleService.startGetLLMModelOptions();
       }
@@ -86,7 +96,14 @@ export class ModelConfigPage implements OnInit {
   getSTTModelOptions() {
     if (this.bleService.ip) {
       try {
-        this.httpService.getSTTModelOptions(this.bleService.ip).subscribe(res => {});
+        this.httpService.getSTTModelOptions(this.bleService.ip).subscribe(res => {
+          if (res.status === 200) {
+            this.sttModelOptions = res.data;
+            this.cd.detectChanges();
+          } else {
+            console.log("getSTTModelOptions failed");
+          }
+        });
       } catch {
         this.bleService.startGetSTTModelOptions();
       }
@@ -98,7 +115,14 @@ export class ModelConfigPage implements OnInit {
   getTTSModelOptions() {
     if (this.bleService.ip) {
       try {
-        this.httpService.getTTSModelOptions(this.bleService.ip).subscribe(res => {});
+        this.httpService.getTTSModelOptions(this.bleService.ip).subscribe(res => {
+          if (res.status === 200) {
+            this.ttsModelOptions = res.data;
+            this.cd.detectChanges();
+          } else {
+            console.log("getTTSModelOptions failed");
+          }
+        });
       } catch {
         this.bleService.startGetTTSModelOptions();
       }
@@ -110,7 +134,14 @@ export class ModelConfigPage implements OnInit {
   getModelData() {
     if (this.bleService.ip) {
       try {
-        this.httpService.getModelData(this.bleService.ip).subscribe(res => {});
+        this.httpService.getModelData(this.bleService.ip).subscribe(res => {
+          if (res.status === 200) {
+            this.modelConfData = res.data;
+            this.cd.detectChanges();
+          } else {
+            console.log("getModelData failed");
+          }
+        });
       } catch {
         this.bleService.getModelData();
       }
@@ -143,11 +174,23 @@ export class ModelConfigPage implements OnInit {
 
   save() {
     this.noticeService.showLoading("Saving...");
-  
-    if (this.bleService.sendModelData(this.modelConfData)) {
-      //
+
+    if (this.bleService.ip) {
+      try {
+        this.httpService.updateModelData(this.bleService.ip, this.modelConfData).subscribe(res => {
+          if (res.status === 200) {
+            this.noticeService.hideLoading();
+            this.noticeService.showToast('Model setting success');
+          } else {
+            this.noticeService.hideLoading();
+            this.noticeService.showToast('Model setting failed');
+          }
+        });
+      } catch {
+        this.bleService.sendModelData(this.modelConfData)
+      }
     } else {
-      this.noticeService.showToast('error');
+      this.bleService.sendModelData(this.modelConfData)
     }
   }
 

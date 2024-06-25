@@ -98,56 +98,60 @@ export class BleService {
     BleClient.requestDevice({
       services: [this.serviceUUID],
     }).then(async device => {
-      await BleClient.connect(device.deviceId, (deviceId) => this.onDisconnect(deviceId));
-      console.log(device);
-      this.device.deviceId = device.deviceId;
-      this.device.name = device.name;
-      this.characteristicList.forEach(item => {
-        BleClient.read(device.deviceId, this.serviceUUID, item.uuid).then(value => {
-          let data = new TextDecoder("utf-8").decode(value);
-          console.log('Received value', data);
-          this.dataCache[item.uuid] = data;
-          if (item.uuid === '123e4567-e89b-12d3-a456-426614174004') {
-            this.ip = data;
-          }
-          // this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
-        })
-        BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
-          // console.log(item.uuid, '->Received value', new TextDecoder("utf-8").decode(value))
-          // this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
-          // let oldData = this.dataCache[item.uuid]
-          // let newData = new TextDecoder("utf-8").decode(value)
-          
-          let data = new TextDecoder("utf-8").decode(value);
-          console.log('Received value', data);
-          this.dataCache[item.uuid] = data;
-          if (item.uuid === '123e4567-e89b-12d3-a456-426614174004') {
-            this.ip = data;
-          }
-          // if (item.uuid === "123e4567-e89b-12d3-a456-426614174004" && oldData != newData) {
-          //   this.wifiSetSuccess.next("success")     
-          // }
-        })
-      });
+      try {
+        await BleClient.connect(device.deviceId, (deviceId) => this.onDisconnect(deviceId));
+        console.log(device);
+        this.device.deviceId = device.deviceId;
+        this.device.name = device.name;
+        this.characteristicList.forEach(item => {
+          BleClient.read(device.deviceId, this.serviceUUID, item.uuid).then(value => {
+            let data = new TextDecoder("utf-8").decode(value);
+            console.log('Received value', data);
+            this.dataCache[item.uuid] = data;
+            if (item.uuid === '123e4567-e89b-12d3-a456-426614174004') {
+              this.ip = data;
+            }
+            // this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
+          })
+          BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
+            // console.log(item.uuid, '->Received value', new TextDecoder("utf-8").decode(value))
+            // this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
+            // let oldData = this.dataCache[item.uuid]
+            // let newData = new TextDecoder("utf-8").decode(value)
+            
+            let data = new TextDecoder("utf-8").decode(value);
+            console.log('Received value', data);
+            this.dataCache[item.uuid] = data;
+            if (item.uuid === '123e4567-e89b-12d3-a456-426614174004') {
+              this.ip = data;
+            }
+            // if (item.uuid === "123e4567-e89b-12d3-a456-426614174004" && oldData != newData) {
+            //   this.wifiSetSuccess.next("success")     
+            // }
+          })
+        });
 
-      // console.log("start get model options")
-      // this.getLLMModelOptions();
-      // console.log("start get stt model options")
-      // this.getSTTModelOptions();
-      // console.log("start get tts model options")
-      // this.getTTSModelOptions();
-      // console.log("start get log sub")
-      // this.startLogSub();
-      console.log("start get aily status")
-      this.getAilyStatus();
-      console.log("start get update res")
-      this.getUpdateRes();
-      // console.log("start get llm model options")
-      // this.startGetLLMModelOptions();
-      // console.log("start get stt model options")
-      // this.startGetSTTModelOptions();
-      // console.log("start get tts model options")
-      // this.startGetTTSModelOptions();
+        // console.log("start get model options")
+        // this.getLLMModelOptions();
+        // console.log("start get stt model options")
+        // this.getSTTModelOptions();
+        // console.log("start get tts model options")
+        // this.getTTSModelOptions();
+        // console.log("start get log sub")
+        // this.startLogSub();
+        console.log("start get aily status")
+        this.getAilyStatus();
+        console.log("start get update res")
+        this.getUpdateRes();
+        // console.log("start get llm model options")
+        // this.startGetLLMModelOptions();
+        // console.log("start get stt model options")
+        // this.startGetSTTModelOptions();
+        // console.log("start get tts model options")
+        // this.startGetTTSModelOptions();
+      } catch (e) {
+        console.log("error: ", e)
+      }
     })
   }
 

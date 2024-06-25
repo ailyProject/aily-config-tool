@@ -30,4 +30,8 @@ export class HttpService {
   getModelData(host: string) {
     return this.http.get<ResponseModel>(`http://${host}:8888/api/v1/modelData`)
   }
+
+  updateModelData(host: string, data: any) {
+    return this.http.post<ResponseModel>(`http://${host}:8888/api/v1/modelData`, data)
+  }
 }
