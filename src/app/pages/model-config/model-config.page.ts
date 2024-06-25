@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { modelList } from 'src/app/model.config';
 import { BleService } from 'src/app/services/ble.service';
 import { NoticeService } from 'src/app/services/notice.service';
+import { HttpService } from 'src/app/services/http.service';
 import { llmModelOptionsUUID, sttModelOptionsUUID, ttsModelOptionsUUID } from 'src/app/configs/ble.config';
 
 @Component({
@@ -11,17 +12,19 @@ import { llmModelOptionsUUID, sttModelOptionsUUID, ttsModelOptionsUUID } from 's
 })
 export class ModelConfigPage implements OnInit {
 
-  get llmModelOptions() {
-    return this.bleService.dataCache[llmModelOptionsUUID];
-  }
+  // get llmModelOptions() {
+  //   return this.bleService.dataCache[llmModelOptionsUUID];
+  // }
 
-  get sttModelOptions() {
-    return this.bleService.dataCache[sttModelOptionsUUID];
-  }
+  // get sttModelOptions() {
+  //   return this.bleService.dataCache[sttModelOptionsUUID];
+  // }
 
-  get ttsModelOptions() {
-    return this.bleService.dataCache[ttsModelOptionsUUID];
-  }
+  // get ttsModelOptions() {
+  //   return this.bleService.dataCache[ttsModelOptionsUUID];
+  // }
+
+  llmModelOptions: any = []
 
   modelConfData: any =
     {
@@ -42,15 +45,20 @@ export class ModelConfigPage implements OnInit {
 
   constructor(
     private bleService: BleService,
-    private noticeService: NoticeService
+    private noticeService: NoticeService,
+    private httpService: HttpService
   ) { }
 
   ngOnInit() {
-    console.log('model config init')
-    this.bleService.getModelData().then((modelData) => {
-      this.modelConfData = modelData;
-      console.log("modelConfData: ", this.modelConfData);
-    });
+    this.getLLMModelOptions();
+    this.getSTTModelOptions();
+    this.getTTSModelOptions();
+    this.getModelData();
+
+    // this.bleService.getModelData().then((modelData) => {
+    //   this.modelConfData = modelData;
+    //   console.log("modelConfData: ", this.modelConfData);
+    // });
     this.bleService.updateRes.subscribe((data) => {
       if (data["type"] === 'aily') {
         this.noticeService.hideLoading();
@@ -61,6 +69,54 @@ export class ModelConfigPage implements OnInit {
         }
       }
     })
+  }
+
+  getLLMModelOptions() {
+    if (this.bleService.ip) {
+      try {
+        this.httpService.getLLMModelOptions(this.bleService.ip).subscribe(res => {});
+      } catch {
+        this.bleService.startGetLLMModelOptions();
+      }
+    } else {
+      this.bleService.startGetLLMModelOptions();
+    }
+  }
+
+  getSTTModelOptions() {
+    if (this.bleService.ip) {
+      try {
+        this.httpService.getSTTModelOptions(this.bleService.ip).subscribe(res => {});
+      } catch {
+        this.bleService.startGetSTTModelOptions();
+      }
+    } else {
+      this.bleService.startGetSTTModelOptions();
+    }
+  }
+
+  getTTSModelOptions() {
+    if (this.bleService.ip) {
+      try {
+        this.httpService.getTTSModelOptions(this.bleService.ip).subscribe(res => {});
+      } catch {
+        this.bleService.startGetTTSModelOptions();
+      }
+    } else {
+      this.bleService.startGetTTSModelOptions();
+    }
+  }
+
+  getModelData() {
+    if (this.bleService.ip) {
+      try {
+        this.httpService.getModelData(this.bleService.ip).subscribe(res => {});
+      } catch {
+        this.bleService.getModelData();
+      }
+    } else {
+      this.bleService.getModelData();
+    }
   }
 
   set_llm_model(e) {

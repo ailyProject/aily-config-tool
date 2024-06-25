@@ -10,7 +10,14 @@
 <ion-content [fullscreen]="true">
 <div>
   <div *ngFor="let message of logList">
-    <app-dialog [isMine]="message.role == 'user'">{{message.msg}}</app-dialog>
+    <app-dialog [isMine]="message.role == 'user'">
+      <ng-container *ngIf="message.type == 'text'">
+        <label>{{message.msg}}</label>
+      </ng-container>
+      <ng-container *ngIf="message.type == 'image'">
+        <img [src]="message.msg" />
+      </ng-container>
+    </app-dialog>
   </div>
   <!-- <app-dialog [isMine]="true">dfd</app-dialog>
   <app-dialog>huhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuahhuhuahuah</app-dialog>
@@ -18,10 +25,13 @@
   <app-dialog>huhuahuah</app-dialog>
   <app-dialog [isMine]="true">huhuahuah</app-dialog>
   <app-dialog>huhuahuah</app-dialog> -->
-  <ion-infinite-scroll (ionInfinite)="loadData($event)">
+  <ion-infinite-scroll (ionInfinite)="loadData($event)" [disabled]="disabled">
     <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading more data...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
+  <ng-container>
+    <p *ngIf="showNoMore" style="text-align: center;">----- No more data -----</p>
+  </ng-container>
 </div>
 
 </ion-content>
