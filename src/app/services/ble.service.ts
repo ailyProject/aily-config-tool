@@ -402,13 +402,9 @@ export class BleService {
         let res = new TextDecoder("utf-8").decode(value)
         this.dataCache[item.uuid] = res
         data[item.name] = res
+        this.modelDataSub.next({"name": item.name, "value": res})
       })
     })
-
-    console.log("ModelData: ", data);
-    this.modelDataSub.next(data);
-
-    console.log('Received value', data)
     return data
   }
 
@@ -457,19 +453,23 @@ export class BleService {
   startLogSub(): void {
     BleClient.startNotifications(this.device.deviceId, this.serviceUUID, ailyLogUUID, (value) => {
       try {
-        let data = new TextDecoder("utf-8").decode(value);
-        if (data !== 'EOF') {
-          this.tempLogData += data;
+        let recvData = new TextDecoder("utf-8").decode(value);
+        console.log('LOG SUB Received value', recvData);
+        if (recvData === 'None') {
+          this.logsChanged.next(null)
+          return;
+        }
+        if (recvData !== 'EOF') {
+          this.tempLogData += recvData;
         } else {
-          console.log("tempData: ", this.tempLogData)
           let data = this.tempLogData.split(':')
           this.logsChanged.next({
             "role": data[0],
             "msg": data[2],
             "type": data[1]
           })
+          this.tempLogData = '';
         }
-        this.tempLogData = '';
       } catch (e) {
         console.log("Log get error: ", e);
       }

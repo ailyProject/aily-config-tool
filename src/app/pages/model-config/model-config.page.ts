@@ -69,7 +69,6 @@ export class ModelConfigPage implements OnInit {
     this.getLLMModelOptions();
     this.getSTTModelOptions();
     this.getTTSModelOptions();
-    this.getModelData();
 
     // this.bleService.getModelData().then((modelData) => {
     //   this.modelConfData = modelData;
@@ -85,10 +84,32 @@ export class ModelConfigPage implements OnInit {
       this.sttModelOptions.push(data);
     });
     this.bleService.modelDataSub.subscribe((data: any) => {
-      console.log("modelDataSub: ", data)
       // 将data的值赋给modelConfData
       // this.modelConfData = {...this.modelConfData, ...data};
-      this.setModelData(data);
+      let key = data.name;
+      if (key === "llmKey") {
+        this.llmKey = data.value;
+      } else if (key === "llmModel") {
+        this.llmModel = data.value;
+      } else if (key === "llmPrePrompt") {
+        this.llmPrePrompt = data.value;
+      } else if (key === "llmTemp") {
+        this.llmTemp = data.value;
+      } else if (key === "llmURL") {
+        this.llmURL = data.value;
+      } else if (key === "sttKey") {
+        this.sttKey = data.value;
+      } else if (key === "sttModel") {
+        this.sttModel = data.value;
+      } else if (key === "sttURL") {
+        this.sttURL = data.value;
+      } else if (key === "ttsKey") {
+        this.ttsKey = data.value;
+      } else if (key === "ttsModel") {
+        this.ttsModel = data.value;
+      } else if (key === "ttsRole") {
+        this.ttsRole = data.value;
+      }
       this.cd.detectChanges();
       // console.log("modelConfData: ", this.modelConfData)
     });
@@ -104,23 +125,8 @@ export class ModelConfigPage implements OnInit {
     })
   }
 
-  setModelData(data) {
-    console.log("setModelData: ", data)
-    this.llmKey = data.llmKey;
-    this.llmModel = data.llmModel;
-    this.llmPrePrompt = data.llmPrePrompt;
-    this.llmTemp = data.llmTemp;
-    this.llmURL = data.llmURL;
-    this.sttKey = data.sttKey;
-    this.sttModel = data.sttModel;
-    this.sttURL = data.sttURL;
-    this.ttsKey = data.ttsKey;
-    this.ttsModel = data.ttsModel;
-    this.ttsRole = data.ttsRole;
-
-    console.log("llmModel: ", this.llmModel)
-    console.log("sttModel: ", this.sttModel)
-    console.log("ttsModel: ", this.ttsModel)
+  ngAfterViewInit() {
+    this.getModelData();
   }
 
   getLLMModelOptions() {
@@ -180,7 +186,20 @@ export class ModelConfigPage implements OnInit {
       this.httpService.getModelData(this.bleService.ip).subscribe(res => {
         if (res.status === 200) {
           // this.modelConfData = res.data;
-          this.setModelData(res.data);
+          if (res.data) {
+            let data = res.data;
+            this.llmKey = data.llmKey;
+            this.llmModel = data.llmModel;
+            this.llmPrePrompt = data.llmPrePrompt;
+            this.llmTemp = data.llmTemp;
+            this.llmURL = data.llmURL;
+            this.sttKey = data.sttKey;
+            this.sttModel = data.sttModel;
+            this.sttURL = data.sttURL;
+            this.ttsKey = data.ttsKey;
+            this.ttsModel = data.ttsModel;
+            this.ttsRole = data.ttsRole;
+          }
           this.cd.detectChanges();
         } else {
           console.log("getModelData failed");

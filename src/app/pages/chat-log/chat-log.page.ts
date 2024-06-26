@@ -74,7 +74,14 @@ export class ChatLogPage implements OnInit {
   
     this.bleService.logsChanged.subscribe(res => {
       console.log(res);
-      this.logList.push(res);
+      if (res === null) {
+        if (this.page > 1) {
+          this.disabled = true;
+          this.showNoMore = true;
+        }
+      } else {
+        this.logList.push(res);
+      }
     });
   }
 
