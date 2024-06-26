@@ -405,6 +405,7 @@ export class BleService {
       })
     })
 
+    console.log("ModelData: ", data);
     this.modelDataSub.next(data);
 
     console.log('Received value', data)

@@ -13,22 +13,22 @@
       <ion-label>Large Language</ion-label>
     </ion-item-divider>
     <ion-item>
-      <ion-select label="Model" value="modelConfData?.llmModel" placeholder="{{ modelConfData?.llmModel }}" labelPlacement="floating" (ionChange)="set_llm_model($event)">
+      <ion-select label="Model" value="llmModel" placeholder="{{ llmModel }}" labelPlacement="floating" (ionChange)="set_llm_model($event)">
         <ion-select-option *ngFor="let item of llmModelOptions" value="{{item.value}}||{{item.server}}">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-input labelPlacement="floating" [(ngModel)]="modelConfData.llmKey">
+      <ion-input labelPlacement="floating" [(ngModel)]="llmKey">
         <div slot="label">API Key</div>
       </ion-input>
     </ion-item>
     <ion-item>
-      <ion-input labelPlacement="floating" [(ngModel)]="modelConfData.llmPrePrompt">
+      <ion-input labelPlacement="floating" [(ngModel)]="llmPrePrompt">
         <div slot="label">System Prompt</div>
       </ion-input>
     </ion-item>
     <ion-item>
-      <ion-input labelPlacement="floating" [(ngModel)]="modelConfData.llmTemp">
+      <ion-input labelPlacement="floating" [(ngModel)]="llmTemp">
         <div slot="label">Temperature</div>
       </ion-input>
     </ion-item>
@@ -36,12 +36,12 @@
       <ion-label>Speech Recognition</ion-label>
     </ion-item-divider>
     <ion-item>
-      <ion-select label="Model" placeholder="{{ modelConfData?.sttModel || '可用模型' }}" labelPlacement="floating" (ionChange)="set_stt_model($event)">
+      <ion-select label="Model" placeholder="{{ sttModel || '可用模型' }}" labelPlacement="floating" (ionChange)="set_stt_model($event)">
         <ion-select-option value="{{item.value}}||{{item.server}}" *ngFor="let item of sttModelOptions">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-input labelPlacement="floating" [(ngModel)]="modelConfData.sttKey">
+      <ion-input labelPlacement="floating" [(ngModel)]="sttKey">
         <div slot="label">API Key</div>
       </ion-input>
     </ion-item>
@@ -49,17 +49,17 @@
       <ion-label>Text To Speech</ion-label>
     </ion-item-divider>
     <ion-item>
-      <ion-select label="Model" placeholder="{{ modelConfData?.ttsModel || '可用模型' }}" labelPlacement="floating" (ionChange)="set_tts_model($event)">
+      <ion-select label="Model" placeholder="{{ ttsModel || '可用模型' }}" labelPlacement="floating" (ionChange)="set_tts_model($event)">
         <ion-select-option value="{{item.value}}||{{item.server}}" *ngFor="let item of ttsModelOptions">{{item.name}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-input labelPlacement="floating" [(ngModel)]="modelConfData.ttsKey">
+      <ion-input labelPlacement="floating" [(ngModel)]="ttsKey">
         <div slot="label">API Key</div>
       </ion-input>
     </ion-item>
     <ion-item>
-      <ion-input labelPlacement="floating" [(ngModel)]="modelConfData.ttsRole">
+      <ion-input labelPlacement="floating" [(ngModel)]="ttsRole">
         <div slot="label">Role</div>
       </ion-input>
     </ion-item>

@@ -28,21 +28,34 @@ export class ModelConfigPage implements OnInit {
   sttModelOptions: any = []
   ttsModelOptions: any = []
 
-  modelConfData: any =
-    {
-      "llmURL": "",
-      "llmModel": "",
-      "llmKey": "",
-      "llmPrePrompt": "",
-      "llmTemp": "",
-      "sttURL": "",
-      "sttModel": "",
-      "sttKey": "",
-      "ttsURL": "",
-      "ttsModel": "",
-      "ttsKey": "",
-      "ttsRole": ""
-    }
+  llmURL: string = "";
+  llmModel: string = "";
+  llmKey: string = "";
+  llmPrePrompt: string = "";
+  llmTemp: string = "";
+  sttURL: string = "";
+  sttModel: string = "";
+  sttKey: string = "";
+  ttsURL: string = "";
+  ttsModel: string = "";
+  ttsKey: string = "";
+  ttsRole: string = "";
+
+  // modelConfData: any =
+  //   {
+  //     "llmURL": "",
+  //     "llmModel": "",
+  //     "llmKey": "",
+  //     "llmPrePrompt": "",
+  //     "llmTemp": "",
+  //     "sttURL": "",
+  //     "sttModel": "",
+  //     "sttKey": "",
+  //     "ttsURL": "",
+  //     "ttsModel": "",
+  //     "ttsKey": "",
+  //     "ttsRole": ""
+  //   }
 
 
   constructor(
@@ -71,8 +84,13 @@ export class ModelConfigPage implements OnInit {
     this.bleService.sttModelOptionsSub.subscribe((data) => {
       this.sttModelOptions.push(data);
     });
-    this.bleService.modelDataSub.subscribe((data) => {
-      this.modelConfData = data;
+    this.bleService.modelDataSub.subscribe((data: any) => {
+      console.log("modelDataSub: ", data)
+      // 将data的值赋给modelConfData
+      // this.modelConfData = {...this.modelConfData, ...data};
+      this.setModelData(data);
+      this.cd.detectChanges();
+      // console.log("modelConfData: ", this.modelConfData)
     });
     this.bleService.updateRes.subscribe((data) => {
       if (data["type"] === 'aily') {
@@ -86,7 +104,27 @@ export class ModelConfigPage implements OnInit {
     })
   }
 
+  setModelData(data) {
+    console.log("setModelData: ", data)
+    this.llmKey = data.llmKey;
+    this.llmModel = data.llmModel;
+    this.llmPrePrompt = data.llmPrePrompt;
+    this.llmTemp = data.llmTemp;
+    this.llmURL = data.llmURL;
+    this.sttKey = data.sttKey;
+    this.sttModel = data.sttModel;
+    this.sttURL = data.sttURL;
+    this.ttsKey = data.ttsKey;
+    this.ttsModel = data.ttsModel;
+    this.ttsRole = data.ttsRole;
+
+    console.log("llmModel: ", this.llmModel)
+    console.log("sttModel: ", this.sttModel)
+    console.log("ttsModel: ", this.ttsModel)
+  }
+
   getLLMModelOptions() {
+    console.log("start getLLMModelOptions")
     if (this.bleService.ip) {
       try {
         this.httpService.getLLMModelOptions(this.bleService.ip).subscribe(res => {
@@ -106,6 +144,7 @@ export class ModelConfigPage implements OnInit {
   }
 
   getSTTModelOptions() {
+    console.log("start getSTTModelOptions")
     if (this.bleService.ip) {
       this.httpService.getSTTModelOptions(this.bleService.ip).subscribe(res => {
         if (res.status === 200) {
@@ -121,6 +160,7 @@ export class ModelConfigPage implements OnInit {
   }
 
   getTTSModelOptions() {
+    console.log("start getTTSModelOptions")
     if (this.bleService.ip) {
       this.httpService.getTTSModelOptions(this.bleService.ip).subscribe(res => {
         if (res.status === 200) {
@@ -139,13 +179,15 @@ export class ModelConfigPage implements OnInit {
     if (this.bleService.ip) {
       this.httpService.getModelData(this.bleService.ip).subscribe(res => {
         if (res.status === 200) {
-          this.modelConfData = res.data;
+          // this.modelConfData = res.data;
+          this.setModelData(res.data);
           this.cd.detectChanges();
         } else {
           console.log("getModelData failed");
         }
       });
     } else {
+      console.log("Get model data from ble")
       this.bleService.getModelData();
     }
   }
@@ -154,8 +196,10 @@ export class ModelConfigPage implements OnInit {
     let data = e.detail.value;
     if (data) {
       let dataArr = data.split("||")
-      this.modelConfData.llmModel = dataArr[0];
-      this.modelConfData.llmURL = dataArr[1];
+      this.llmModel = dataArr[0];
+      this.llmURL = dataArr[1];
+      // this.modelConfData.llmModel = dataArr[0];
+      // this.modelConfData.llmURL = dataArr[1];
     }
   }
 
@@ -163,8 +207,10 @@ export class ModelConfigPage implements OnInit {
     let data = e.detail.value;
     if (data) {
       let dataArr = data.split("||")
-      this.modelConfData.sttModel = dataArr[0];
-      this.modelConfData.sttURL = dataArr[1];
+      this.sttModel = dataArr[0];
+      this.sttURL = dataArr[1];
+      // this.modelConfData.sttModel = dataArr[0];
+      // this.modelConfData.sttURL = dataArr[1];
     }
   }
 
@@ -173,17 +219,33 @@ export class ModelConfigPage implements OnInit {
     let data = e.detail.value;
     if (data) {
       let dataArr = data.split("||")
-      this.modelConfData.ttsModel = dataArr[0];
-      this.modelConfData.ttsURL = dataArr[1];
+      // this.modelConfData.ttsModel = dataArr[0];
+      // this.modelConfData.ttsURL = dataArr[1];
+      this.ttsModel = dataArr[0];
+      this.ttsURL = dataArr[1];
     }
   }
 
   save() {
     this.noticeService.showLoading("Saving...");
 
+    let modelConfData = {
+      llmKey: this.llmKey,
+      llmModel: this.llmModel,
+      llmPrePrompt: this.llmPrePrompt,
+      llmTemp: this.llmTemp,
+      llmURL: this.llmURL,
+      sttKey: this.sttKey,
+      sttModel: this.sttModel,
+      sttURL: this.sttURL,
+      ttsKey: this.ttsKey,
+      ttsModel: this.ttsModel,
+      ttsRole: this.ttsRole,
+    }
+
     if (this.bleService.ip) {
       try {
-        this.httpService.updateModelData(this.bleService.ip, this.modelConfData).subscribe(res => {
+        this.httpService.updateModelData(this.bleService.ip, modelConfData).subscribe(res => {
           if (res.status === 200) {
             this.noticeService.hideLoading();
             this.noticeService.showToast('Model setting success');
@@ -193,10 +255,10 @@ export class ModelConfigPage implements OnInit {
           }
         });
       } catch {
-        this.bleService.sendModelData(this.modelConfData)
+        this.bleService.sendModelData(modelConfData)
       }
     } else {
-      this.bleService.sendModelData(this.modelConfData)
+      this.bleService.sendModelData(modelConfData)
     }
   }
 
