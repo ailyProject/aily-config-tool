@@ -229,7 +229,7 @@ export class BleService {
     })
   }
 
-  async startGetLLMModelOptions() {
+  startGetLLMModelOptions() {
     this.getLLMModelOptions();
     BleClient.read(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID);
   }
@@ -264,7 +264,7 @@ export class BleService {
     })
   }
 
-  async startGetSTTModelOptions() {
+  startGetSTTModelOptions() {
     this.getSTTModelOptions();
     BleClient.read(this.device.deviceId, this.serviceUUID, sttModelOptionsUUID);
   }
@@ -299,7 +299,7 @@ export class BleService {
     })
   }
 
-  async startGetTTSModelOptions() {
+  startGetTTSModelOptions() {
     this.getTTSModelOptions();
     BleClient.read(this.device.deviceId, this.serviceUUID, ttsModelOptionsUUID);
   }
@@ -394,7 +394,7 @@ export class BleService {
 
   modelDataSub = new Subject();
 
-  async getModelData() {
+ getModelData() {
     let data: any = {};
     // 获取模型信息
     this.chrModelConfList.forEach(item => {
