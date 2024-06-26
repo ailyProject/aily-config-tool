@@ -62,6 +62,18 @@ export class ModelConfigPage implements OnInit {
     //   this.modelConfData = modelData;
     //   console.log("modelConfData: ", this.modelConfData);
     // });
+    this.bleService.llmModelOptionsSub.subscribe((data) => {
+      this.llmModelOptions.push(data);
+    });
+    this.bleService.ttsModelOptionsSub.subscribe((data) => {
+      this.ttsModelOptions.push(data);
+    });
+    this.bleService.sttModelOptionsSub.subscribe((data) => {
+      this.sttModelOptions.push(data);
+    });
+    this.bleService.modelDataSub.subscribe((data) => {
+      this.modelConfData = data;
+    });
     this.bleService.updateRes.subscribe((data) => {
       if (data["type"] === 'aily') {
         this.noticeService.hideLoading();
@@ -95,18 +107,14 @@ export class ModelConfigPage implements OnInit {
 
   getSTTModelOptions() {
     if (this.bleService.ip) {
-      try {
-        this.httpService.getSTTModelOptions(this.bleService.ip).subscribe(res => {
-          if (res.status === 200) {
-            this.sttModelOptions = res.data;
-            this.cd.detectChanges();
-          } else {
-            console.log("getSTTModelOptions failed");
-          }
-        });
-      } catch {
-        this.bleService.startGetSTTModelOptions();
-      }
+      this.httpService.getSTTModelOptions(this.bleService.ip).subscribe(res => {
+        if (res.status === 200) {
+          this.sttModelOptions = res.data;
+          this.cd.detectChanges();
+        } else {
+          console.log("getSTTModelOptions failed");
+        }
+      });
     } else {
       this.bleService.startGetSTTModelOptions();
     }
@@ -114,18 +122,14 @@ export class ModelConfigPage implements OnInit {
 
   getTTSModelOptions() {
     if (this.bleService.ip) {
-      try {
-        this.httpService.getTTSModelOptions(this.bleService.ip).subscribe(res => {
-          if (res.status === 200) {
-            this.ttsModelOptions = res.data;
-            this.cd.detectChanges();
-          } else {
-            console.log("getTTSModelOptions failed");
-          }
-        });
-      } catch {
-        this.bleService.startGetTTSModelOptions();
-      }
+      this.httpService.getTTSModelOptions(this.bleService.ip).subscribe(res => {
+        if (res.status === 200) {
+          this.ttsModelOptions = res.data;
+          this.cd.detectChanges();
+        } else {
+          console.log("getTTSModelOptions failed");
+        }
+      });
     } else {
       this.bleService.startGetTTSModelOptions();
     }
@@ -133,18 +137,14 @@ export class ModelConfigPage implements OnInit {
 
   getModelData() {
     if (this.bleService.ip) {
-      try {
-        this.httpService.getModelData(this.bleService.ip).subscribe(res => {
-          if (res.status === 200) {
-            this.modelConfData = res.data;
-            this.cd.detectChanges();
-          } else {
-            console.log("getModelData failed");
-          }
-        });
-      } catch {
-        this.bleService.getModelData();
-      }
+      this.httpService.getModelData(this.bleService.ip).subscribe(res => {
+        if (res.status === 200) {
+          this.modelConfData = res.data;
+          this.cd.detectChanges();
+        } else {
+          console.log("getModelData failed");
+        }
+      });
     } else {
       this.bleService.getModelData();
     }
@@ -152,24 +152,30 @@ export class ModelConfigPage implements OnInit {
 
   set_llm_model(e) {
     let data = e.detail.value;
-    let dataArr = data.split("||")
-    this.modelConfData.llmModel = dataArr[0];
-    this.modelConfData.llmURL = dataArr[1];
+    if (data) {
+      let dataArr = data.split("||")
+      this.modelConfData.llmModel = dataArr[0];
+      this.modelConfData.llmURL = dataArr[1];
+    }
   }
 
   set_stt_model(e) {
     let data = e.detail.value;
-    let dataArr = data.split("||")
-    this.modelConfData.sttModel = dataArr[0];
-    this.modelConfData.sttURL = dataArr[1];
+    if (data) {
+      let dataArr = data.split("||")
+      this.modelConfData.sttModel = dataArr[0];
+      this.modelConfData.sttURL = dataArr[1];
+    }
   }
 
   set_tts_model(e) {
     console.log("set_tts_model: ", e)
     let data = e.detail.value;
-    let dataArr = data.split("||")
-    this.modelConfData.ttsModel = dataArr[0];
-    this.modelConfData.ttsURL = dataArr[1];
+    if (data) {
+      let dataArr = data.split("||")
+      this.modelConfData.ttsModel = dataArr[0];
+      this.modelConfData.ttsURL = dataArr[1];
+    }
   }
 
   save() {

@@ -109,7 +109,11 @@ export class BleService {
             console.log('Received value', data);
             this.dataCache[item.uuid] = data;
             if (item.uuid === '123e4567-e89b-12d3-a456-426614174004') {
-              this.ip = data;
+              if (data == 'UNKNOWN') {
+                this.ip = '';
+              } else {
+                // this.ip = data;
+              }
             }
             // this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
           })
@@ -123,7 +127,11 @@ export class BleService {
             console.log('Received value', data);
             this.dataCache[item.uuid] = data;
             if (item.uuid === '123e4567-e89b-12d3-a456-426614174004') {
-              this.ip = data;
+              if (data == 'UNKNOWN') {
+                this.ip = '';
+              } else {
+                // this.ip = data;
+              }
             }
             // if (item.uuid === "123e4567-e89b-12d3-a456-426614174004" && oldData != newData) {
             //   this.wifiSetSuccess.next("success")     
@@ -177,6 +185,9 @@ export class BleService {
   }
 
   
+  llmModelOptionsSub = new Subject();
+  sttModelOptionsSub = new Subject();
+  ttsModelOptionsSub = new Subject();
   llmModelOptions = [];
   sttModelOptions = [];
   ttsModelOptions = [];
@@ -197,7 +208,9 @@ export class BleService {
         if (data !== "None") {
           if (data !== 'EOF') {
             let [name, value, server] = this.splitData(data)
-            this.llmModelOptions.push({"name": name, "value": value, "server": server})
+            let item = {"name": name, "value": value, "server": server}
+            this.llmModelOptions.push(item)
+            this.llmModelOptionsSub.next(item)
           } else {
             try {
               console.log("llmModelOptions: ", this.llmModelOptions)
@@ -232,7 +245,9 @@ export class BleService {
         if (data !== 'None') {
           if (data !== 'EOF') {
             let [name, value, server] = this.splitData(data)
-            this.sttModelOptions.push({"name": name, "value": value, "server": server})
+            let item = {"name": name, "value": value, "server": server}
+            this.sttModelOptions.push(item)
+            this.sttModelOptionsSub.next(item)
           } else {
             try {
               console.log("sttModelOptions: ", this.sttModelOptions)
@@ -265,7 +280,9 @@ export class BleService {
         if (data !== 'None') {
           if (data !== 'EOF') {
             let [name, value, server] = this.splitData(data)
-            this.ttsModelOptions.push({"name": name, "value": value, "server": server})
+            let item = {"name": name, "value": value, "server": server}
+            this.ttsModelOptions.push(item)
+            this.ttsModelOptionsSub.next(item)
           } else {
             try {
               console.log("ttsModelOptions: ", this.ttsModelOptions)
@@ -375,6 +392,8 @@ export class BleService {
   //   })
   // }
 
+  modelDataSub = new Subject();
+
   async getModelData() {
     let data: any = {};
     // 获取模型信息
@@ -385,6 +404,8 @@ export class BleService {
         data[item.name] = res
       })
     })
+
+    this.modelDataSub.next(data);
 
     console.log('Received value', data)
     return data
@@ -426,77 +447,28 @@ export class BleService {
   tempLogData = '';
 
   startGetLog() {
+    console.log("start get log")
     this.startLogSub();
     BleClient.read(this.device.deviceId, this.serviceUUID, ailyLogUUID);
+    console.log("end get log")
   }
 
   startLogSub(): void {
     BleClient.startNotifications(this.device.deviceId, this.serviceUUID, ailyLogUUID, (value) => {
-      // console.log('LogSub Received value: ', new TextDecoder("utf-8").decode(value))
-      // let data = new TextDecoder("utf-8").decode(value)
-      // this.tempLogData += data;
-      // if (this.tempLogData.endsWith('\n')) {
-      //   this.tempLogData = this.tempLogData.substring(0, this.tempLogData.length - 1)
-      //   // 按":"分割数据
-      //   let data = this.tempLogData.split(':')
-      //   this.ailyLogs.push({
-      //     "role": data[0],
-      //     "msg": data[1]
-      //   })
-      //   this.tempLogData = ''
-      // }
-
       try {
         let data = new TextDecoder("utf-8").decode(value);
-        // console.log("Log get data: ", data)
-
-        // this.ailyLogs.push(JSON.parse(data))
         if (data !== 'EOF') {
           this.tempLogData += data;
         } else {
-          // console.log("tempLogData: ", this.tempLogData)
-          // let tempData = JSON.parse(this.tempLogData);
           console.log("tempData: ", this.tempLogData)
           let data = this.tempLogData.split(':')
-
-          // 判断data[1]是否为json
-          let msg;
-          try {
-            msg = JSON.parse(data[1])
-          } catch (e) {
-            msg = data[1]
-          }
-          if (typeof msg === 'object') {
-            this.logsChanged.next({
-              "role": data[0],
-              "msg": msg,
-              "type": "img"
-            })
-            // this.ailyLogs.push({
-            //   "role": data[0],
-            //   "msg": msg["url"],
-            //   "type": "img"
-            // })
-          } else {
-            this.logsChanged.next({
-              "role": data[0],
-              "msg": data[1],
-              "type": "text"
-            })
-            // this.ailyLogs.push({
-            //   "role": data[0],
-            //   "msg": data[1],
-            //   "type": "text"
-            // })
-          }
-          // this.ailyLogs.push({
-          //   "role": data[0],
-          //   "msg": data[1],
-          //   "type": 
-          // })
-          // this.ailyLogs.push(this.tempLogData);
-          this.tempLogData = '';
+          this.logsChanged.next({
+            "role": data[0],
+            "msg": data[2],
+            "type": data[1]
+          })
         }
+        this.tempLogData = '';
       } catch (e) {
         console.log("Log get error: ", e);
       }
