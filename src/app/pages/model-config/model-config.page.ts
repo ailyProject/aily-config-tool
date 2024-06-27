@@ -69,20 +69,7 @@ export class ModelConfigPage implements OnInit {
     this.getLLMModelOptions();
     this.getSTTModelOptions();
     this.getTTSModelOptions();
-
-    // this.bleService.getModelData().then((modelData) => {
-    //   this.modelConfData = modelData;
-    //   console.log("modelConfData: ", this.modelConfData);
-    // });
-    this.bleService.llmModelOptionsSub.subscribe((data) => {
-      this.llmModelOptions.push(data);
-    });
-    this.bleService.ttsModelOptionsSub.subscribe((data) => {
-      this.ttsModelOptions.push(data);
-    });
-    this.bleService.sttModelOptionsSub.subscribe((data) => {
-      this.sttModelOptions.push(data);
-    });
+  
     this.bleService.modelDataSub.subscribe((data: any) => {
       // 将data的值赋给modelConfData
       // this.modelConfData = {...this.modelConfData, ...data};
@@ -132,20 +119,16 @@ export class ModelConfigPage implements OnInit {
   getLLMModelOptions() {
     console.log("start getLLMModelOptions")
     if (this.bleService.ip) {
-      try {
-        this.httpService.getLLMModelOptions(this.bleService.ip).subscribe(res => {
-          if (res.status === 200) {
-            this.llmModelOptions = res.data;
-            this.cd.detectChanges();
-          } else {
-            console.log("getLLMModelOptions failed");
-          }
-        });
-      } catch {
-        this.bleService.startGetLLMModelOptions();
-      }
+      this.httpService.getLLMModelOptions(this.bleService.ip).subscribe(res => {
+        if (res.status === 200) {
+          this.llmModelOptions = res.data;
+          this.cd.detectChanges();
+        } else {
+          console.log("getLLMModelOptions failed");
+        }
+      });
     } else {
-      this.bleService.startGetLLMModelOptions();
+      this.llmModelOptions = this.bleService.llmModelOptions;
     }
   }
 
@@ -161,7 +144,7 @@ export class ModelConfigPage implements OnInit {
         }
       });
     } else {
-      this.bleService.startGetSTTModelOptions();
+      this.sttModelOptions = this.bleService.sttModelOptions;
     }
   }
 
@@ -177,7 +160,7 @@ export class ModelConfigPage implements OnInit {
         }
       });
     } else {
-      this.bleService.startGetTTSModelOptions();
+      this.ttsModelOptions = this.bleService.ttsModelOptions;
     }
   }
 
@@ -263,19 +246,15 @@ export class ModelConfigPage implements OnInit {
     }
 
     if (this.bleService.ip) {
-      try {
-        this.httpService.updateModelData(this.bleService.ip, modelConfData).subscribe(res => {
-          if (res.status === 200) {
-            this.noticeService.hideLoading();
-            this.noticeService.showToast('Model setting success');
-          } else {
-            this.noticeService.hideLoading();
-            this.noticeService.showToast('Model setting failed');
-          }
-        });
-      } catch {
-        this.bleService.sendModelData(modelConfData)
-      }
+      this.httpService.updateModelData(this.bleService.ip, modelConfData).subscribe(res => {
+        if (res.status === 200) {
+          this.noticeService.hideLoading();
+          this.noticeService.showToast('Model setting success');
+        } else {
+          this.noticeService.hideLoading();
+          this.noticeService.showToast('Model setting failed');
+        }
+      });
     } else {
       this.bleService.sendModelData(modelConfData)
     }

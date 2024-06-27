@@ -151,12 +151,12 @@ export class BleService {
         this.getAilyStatus();
         console.log("start get update res")
         this.getUpdateRes();
-        // console.log("start get llm model options")
-        // this.startGetLLMModelOptions();
-        // console.log("start get stt model options")
-        // this.startGetSTTModelOptions();
-        // console.log("start get tts model options")
-        // this.startGetTTSModelOptions();
+        console.log("start get llm model options")
+        this.startGetLLMModelOptions();
+        console.log("start get stt model options")
+        this.startGetSTTModelOptions();
+        console.log("start get tts model options")
+        this.startGetTTSModelOptions();
       } catch (e) {
         console.log("error: ", e)
       }
@@ -185,9 +185,9 @@ export class BleService {
   }
 
   
-  llmModelOptionsSub = new Subject();
-  sttModelOptionsSub = new Subject();
-  ttsModelOptionsSub = new Subject();
+  // llmModelOptionsSub = new Subject();
+  // sttModelOptionsSub = new Subject();
+  // ttsModelOptionsSub = new Subject();
   llmModelOptions = [];
   sttModelOptions = [];
   ttsModelOptions = [];
@@ -197,30 +197,22 @@ export class BleService {
     return [dataArr[0], dataArr[1], dataArr[2]]
   }
 
+
   async getLLMModelOptions() {
     // BleClient.read(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID).then(value => {
     //   // this.dataCache[llmModelOptionsUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
     // })
+    let tempData = '';
     BleClient.startNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID, (value) => {
       try {
         let data = new TextDecoder("utf-8").decode(value)
-        console.log('Received value', data)
         if (data !== "None") {
           if (data !== 'EOF') {
-            let [name, value, server] = this.splitData(data)
-            let item = {"name": name, "value": value, "server": server}
-            this.llmModelOptions.push(item)
-            this.llmModelOptionsSub.next(item)
+            tempData += data;
           } else {
-            try {
-              console.log("llmModelOptions: ", this.llmModelOptions)
-              // let res = JSON.parse(this.llmModelOptions);
-              this.dataCache[llmModelOptionsUUID] = this.llmModelOptions;
-              BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, llmModelOptionsUUID);
-            } catch (e) {
-              console.log("llmModelOptions error: ", e)
-              console.log("llmModelOptions: ", this.llmModelOptions)
-            }
+            console.log("LLM Model Received value:", tempData)
+            this.llmModelOptions = JSON.parse(tempData);
+            tempData = '';
           }
         }
       } catch(e) {
@@ -235,27 +227,18 @@ export class BleService {
   }
 
   async getSTTModelOptions() {
-    // BleClient.read(this.device.deviceId, this.serviceUUID, sttModelOptionsUUID).then(value => {
-    //   // this.dataCache[sttModelOptionsUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
-    // })
+    let tempData = '';
     BleClient.startNotifications(this.device.deviceId, this.serviceUUID, sttModelOptionsUUID, (value) => {
       try {
         let data = new TextDecoder("utf-8").decode(value)
         console.log('Received value', data)
         if (data !== 'None') {
           if (data !== 'EOF') {
-            let [name, value, server] = this.splitData(data)
-            let item = {"name": name, "value": value, "server": server}
-            this.sttModelOptions.push(item)
-            this.sttModelOptionsSub.next(item)
+            tempData += data;
           } else {
-            try {
-              console.log("sttModelOptions: ", this.sttModelOptions)
-              this.dataCache[sttModelOptionsUUID] = this.sttModelOptions;
-              BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, sttModelOptionsUUID);
-            } catch (e) {
-              //
-            }
+            console.log("STT Model Received value:", tempData)
+            this.sttModelOptions = JSON.parse(tempData);
+            tempData = '';
           }
         }
       } catch(e) {
@@ -270,27 +253,17 @@ export class BleService {
   }
 
   async getTTSModelOptions() {
-    // BleClient.read(this.device.deviceId, this.serviceUUID, ttsModelOptionsUUID).then(value => {
-    //   // this.dataCache[ttsModelOptionsUUID] = JSON.parse(new TextDecoder("utf-8").decode(value))
-    // })
+    let tempData = '';
     BleClient.startNotifications(this.device.deviceId, this.serviceUUID, ttsModelOptionsUUID, (value) => {
       try {
         let data = new TextDecoder("utf-8").decode(value)
-        console.log('Received value', data)
         if (data !== 'None') {
           if (data !== 'EOF') {
-            let [name, value, server] = this.splitData(data)
-            let item = {"name": name, "value": value, "server": server}
-            this.ttsModelOptions.push(item)
-            this.ttsModelOptionsSub.next(item)
+            tempData += data;
           } else {
-            try {
-              console.log("ttsModelOptions: ", this.ttsModelOptions)
-              this.dataCache[ttsModelOptionsUUID] = this.ttsModelOptions;
-              BleClient.stopNotifications(this.device.deviceId, this.serviceUUID, ttsModelOptionsUUID);
-            } catch (e) {
-              //
-            }
+            console.log("TTS Model Received value:", tempData)
+            this.ttsModelOptions = JSON.parse(tempData);
+            tempData = '';
           }
         }
       } catch(e) {
@@ -410,10 +383,12 @@ export class BleService {
 
   sendModelData(data) {
     this.chrModelConfList.forEach(item => {
+      // console.log("uuid: ", item.uuid, "data: ", data[item.name])
       this.send(item.uuid, data[item.name])
+      // this.send('123e4567-e89b-12d3-a456-00805f9b34fc', 'gpt-test')
     })
 
-    this.send(ailyUUID, "reload")
+    // this.send(ailyUUID, "reload")
     return true
   }
 
@@ -437,7 +412,7 @@ export class BleService {
         console.log('send success')
       })
     } catch (error) {
-      console.log('send error: ', error)
+      console.log(uuid + 'send error: ', error)
     }
   }
 
@@ -522,9 +497,12 @@ export class BleService {
     // this.startLogSub();
     this.getAilyStatus();
     this.getUpdateRes();
-    // this.startGetLLMModelOptions();
-    // this.startGetSTTModelOptions();
-    // this.startGetTTSModelOptions();
+    console.log("start get llm model options")
+    this.startGetLLMModelOptions();
+    console.log("start get stt model options")
+    this.startGetSTTModelOptions();
+    console.log("start get tts model options")
+    this.startGetTTSModelOptions();
   }
 
   onDisconnect(deviceId: string): void {
