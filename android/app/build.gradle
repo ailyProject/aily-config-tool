@@ -1,10 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    namespace "tool.aily.pro"
+    namespace "t.aily.pro"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "tool.aily.pro"
+        applicationId "t.aily.pro"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

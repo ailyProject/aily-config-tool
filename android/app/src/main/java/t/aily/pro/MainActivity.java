@@ -1,4 +1,4 @@
-package tool.aily.pro;
+package t.aily.pro;
 
 import com.getcapacitor.BridgeActivity;
 
