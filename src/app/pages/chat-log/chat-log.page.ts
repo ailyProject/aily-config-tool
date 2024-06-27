@@ -29,7 +29,7 @@ export class ChatLogPage implements OnInit {
   ) { }
 
   getLogByHttp() {
-    this.httpService.getLogs(this.bleService.ip, this.page, this.perPage).subscribe(res => {
+    this.httpService.getLogs(this.httpService.ip, this.page, this.perPage).subscribe(res => {
       console.log(res);
       if (res.status === 200) {
         if (res.data.list.length > 0) {
@@ -48,7 +48,8 @@ export class ChatLogPage implements OnInit {
   }
 
   getLogs(load_more) {
-    if (this.bleService.ip) {
+    console.log("ip: ", this.httpService.ip)
+    if (this.httpService.ip) {
       this.getLogByHttp();
     } else {
       if (load_more === false) {

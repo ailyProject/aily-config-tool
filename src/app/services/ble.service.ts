@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Platform } from '@ionic/angular';
 import { BleClient } from '@capacitor-community/bluetooth-le';
+import { HttpService } from './http.service';
 import {
   CharacteristicList,
   ChrModelConfList,
@@ -24,7 +25,6 @@ import {
 })
 export class BleService {
 
-  ip = '';
   wifiSetSuccess = new Subject();
   ailyStatus = new Subject();
 
@@ -56,6 +56,7 @@ export class BleService {
   constructor(
     // private dataService: DataService
     private platform: Platform,
+    private httpService: HttpService
   ) { }
 
   browserVersionError = false
@@ -110,11 +111,7 @@ export class BleService {
             console.log('Received value', data);
             this.dataCache[item.uuid] = data;
             if (item.uuid === '123e4567-e89b-12d3-a456-426614174004') {
-              if (data == 'UNKNOWN') {
-                this.ip = '';
-              } else {
-                this.ip = data;
-              }
+              this.pingIp(data);
             }
             // this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
           })
@@ -128,11 +125,7 @@ export class BleService {
             console.log('Received value', data);
             this.dataCache[item.uuid] = data;
             if (item.uuid === '123e4567-e89b-12d3-a456-426614174004') {
-              if (data == 'UNKNOWN') {
-                this.ip = '';
-              } else {
-                this.ip = data;
-              }
+              this.pingIp(data);
             }
             // if (item.uuid === "123e4567-e89b-12d3-a456-426614174004" && oldData != newData) {
             //   this.wifiSetSuccess.next("success")     
@@ -162,6 +155,11 @@ export class BleService {
         console.log("error: ", e)
       }
     })
+  }
+
+  pingIp(ip) {
+    // ping IP是否能ping通
+    this.httpService.checkIpAccessibility(ip);
   }
 
   // https://github.com/capacitor-community/bluetooth-le?tab=readme-ov-file#startnotifications
@@ -474,7 +472,12 @@ export class BleService {
 
     this.characteristicList.forEach(item => {
       BleClient.read(device.deviceId, this.serviceUUID, item.uuid).then(value => {
-        this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
+        let data = new TextDecoder("utf-8").decode(value);
+        console.log('Received value', data);
+        this.dataCache[item.uuid] = data;
+        if (item.uuid === '123e4567-e89b-12d3-a456-426614174004') {
+          this.pingIp(data);
+        }
       })
       BleClient.startNotifications(device.deviceId, this.serviceUUID, item.uuid, (value) => {
         // console.log(item.uuid, '->Received value', new TextDecoder("utf-8").decode(value))
@@ -486,7 +489,7 @@ export class BleService {
         console.log('Received value', data);
         this.dataCache[item.uuid] = data;
         if (item.uuid === '123e4567-e89b-12d3-a456-426614174004') {
-          this.ip = data;
+          this.pingIp(data);
         }
 
         // this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)

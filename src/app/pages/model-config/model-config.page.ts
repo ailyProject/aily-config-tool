@@ -118,8 +118,8 @@ export class ModelConfigPage implements OnInit {
 
   getLLMModelOptions() {
     console.log("start getLLMModelOptions")
-    if (this.bleService.ip) {
-      this.httpService.getLLMModelOptions(this.bleService.ip).subscribe(res => {
+    if (this.httpService.ip) {
+      this.httpService.getLLMModelOptions(this.httpService.ip).subscribe(res => {
         if (res.status === 200) {
           this.llmModelOptions = res.data;
           this.cd.detectChanges();
@@ -134,8 +134,8 @@ export class ModelConfigPage implements OnInit {
 
   getSTTModelOptions() {
     console.log("start getSTTModelOptions")
-    if (this.bleService.ip) {
-      this.httpService.getSTTModelOptions(this.bleService.ip).subscribe(res => {
+    if (this.httpService.ip) {
+      this.httpService.getSTTModelOptions(this.httpService.ip).subscribe(res => {
         if (res.status === 200) {
           this.sttModelOptions = res.data;
           this.cd.detectChanges();
@@ -150,8 +150,8 @@ export class ModelConfigPage implements OnInit {
 
   getTTSModelOptions() {
     console.log("start getTTSModelOptions")
-    if (this.bleService.ip) {
-      this.httpService.getTTSModelOptions(this.bleService.ip).subscribe(res => {
+    if (this.httpService.ip) {
+      this.httpService.getTTSModelOptions(this.httpService.ip).subscribe(res => {
         if (res.status === 200) {
           this.ttsModelOptions = res.data;
           this.cd.detectChanges();
@@ -165,8 +165,8 @@ export class ModelConfigPage implements OnInit {
   }
 
   getModelData() {
-    if (this.bleService.ip) {
-      this.httpService.getModelData(this.bleService.ip).subscribe(res => {
+    if (this.httpService.ip) {
+      this.httpService.getModelData(this.httpService.ip).subscribe(res => {
         if (res.status === 200) {
           // this.modelConfData = res.data;
           if (res.data) {
@@ -245,8 +245,8 @@ export class ModelConfigPage implements OnInit {
       ttsRole: this.ttsRole,
     }
 
-    if (this.bleService.ip) {
-      this.httpService.updateModelData(this.bleService.ip, modelConfData).subscribe(res => {
+    if (this.httpService.ip) {
+      this.httpService.updateModelData(this.httpService.ip, modelConfData).subscribe(res => {
         if (res.status === 200) {
           this.noticeService.hideLoading();
           this.noticeService.showToast('Model setting success');
