@@ -4,6 +4,7 @@ export const wifiUUID = "123e4567-e89b-12d3-a456-00805f9b34fb";
 export const ailyUUID = "123e4567-e89b-12d3-a456-00805f9b3509";
 export const ailyStatusUUID = "123e4567-e89b-12d3-a456-00805f9b350b";
 export const ailyLogUUID = "123e4567-e89b-12d3-a456-00805f9b350a";
+export const ailyMoreLogUUID = "123e4567-e89b-12d3-a456-00805f9b350e";
 export const updateResUUID = "123e4567-e89b-12d3-a456-426614174011";
 
 export const llmModelOptionsUUID = "123e4567-e89b-12d3-a456-00805f9b3500";

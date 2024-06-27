@@ -11,8 +11,10 @@ export class ChatLogPage implements OnInit {
 
   page = 1;
   perPage = 10;
-  disabled: boolean = false;
+  disabled: boolean = true;
   showNoMore: boolean = false;
+
+  loading: boolean = false;
 
   logList: any = [];
 
@@ -33,6 +35,9 @@ export class ChatLogPage implements OnInit {
         if (res.data.list.length > 0) {
           console.log(res.data.list)
           this.logList = this.logList.concat(res.data.list);
+          this.disabled = false;
+          this.loading = false;
+          this.showNoMore = false;
           this.cd.detectChanges();
         } else {
           this.disabled = true;
@@ -42,28 +47,33 @@ export class ChatLogPage implements OnInit {
     });
   }
 
-  getLogs() {
+  getLogs(load_more) {
     if (this.bleService.ip) {
-      try {
-        this.getLogByHttp();
-      } catch (error) {
-        this.bleService.startGetLog();
-      }
-      
+      this.getLogByHttp();
     } else {
-      this.bleService.startGetLog();
+      if (load_more === false) {
+        this.bleService.startGetLog();
+      } else {
+        this.bleService.getMoreLog();
+      }
     }
   }
 
   loadData(event) {
+    event.target.disabled = true;
     if (this.disabled) {
       event.target.disabled = true;
       return;
     }
+    if (this.loading) {
+      return;
+    }
+    this.loading = true;
     this.page++;
     setTimeout(() => {
       // this.bleService.startGetLog();
-      this.getLogs();
+      this.getLogs(true);
+      event.target.disabled = false;
       event.target.complete();
     }, 500);
   }
@@ -81,12 +91,15 @@ export class ChatLogPage implements OnInit {
         }
       } else {
         this.logList.push(res);
+        this.disabled = false;
+        this.loading = false;
+        this.showNoMore = false;
       }
     });
   }
 
   ngAfterViewInit() {
-    this.getLogs();
+    this.getLogs(false);
     // this.bleService.startLogSub();
   }
 }

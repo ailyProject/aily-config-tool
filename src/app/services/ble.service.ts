@@ -10,6 +10,7 @@ import {
   wifiUUID,
   ailyUUID,
   ailyLogUUID,
+  ailyMoreLogUUID,
   llmModelOptionsUUID,
   sttModelOptionsUUID,
   ttsModelOptionsUUID,
@@ -112,7 +113,7 @@ export class BleService {
               if (data == 'UNKNOWN') {
                 this.ip = '';
               } else {
-                // this.ip = data;
+                this.ip = data;
               }
             }
             // this.dataCache[item.uuid] = new TextDecoder("utf-8").decode(value)
@@ -130,7 +131,7 @@ export class BleService {
               if (data == 'UNKNOWN') {
                 this.ip = '';
               } else {
-                // this.ip = data;
+                this.ip = data;
               }
             }
             // if (item.uuid === "123e4567-e89b-12d3-a456-426614174004" && oldData != newData) {
@@ -423,6 +424,10 @@ export class BleService {
     this.startLogSub();
     BleClient.read(this.device.deviceId, this.serviceUUID, ailyLogUUID);
     console.log("end get log")
+  }
+
+  getMoreLog() {
+    BleClient.read(this.device.deviceId, this.serviceUUID, ailyMoreLogUUID);
   }
 
   startLogSub(): void {
