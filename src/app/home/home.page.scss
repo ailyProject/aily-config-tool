@@ -86,7 +86,7 @@ ion-content {
   justify-content: flex-start;
   align-items: center;
   color: #FFF;
-  background: #3980FE;
+  background: #1a6bf8;
   padding-left: 15px;
 
   div:first-child {
@@ -105,7 +105,11 @@ ion-content {
   }
 
   &.btn3 {
-    background: #1196FF;
+    background: #199cff;
+  }
+
+  &.btn4 {
+    background: #00b36b;
   }
 
   .arrow {

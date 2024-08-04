@@ -23,6 +23,10 @@ const routes: Routes = [
     path: 'chat-log',
     loadChildren: () => import('./pages/chat-log/chat-log.module').then(m => m.ChatLogPageModule)
   },
+  {
+    path: 'role-config',
+    loadChildren: () => import('./pages/role-config/role-config.module').then( m => m.RoleConfigPageModule)
+  },
 ];
 
 @NgModule({
